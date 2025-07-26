@@ -3,10 +3,226 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>sukipi - resume</title>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap" rel="stylesheet">
+  <title>Sukipi - Resume</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&family=Anton&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0; 
+      padding: 0 40px 1000px; 
+      font-family: 'JetBrains Mono', monospace;
+      color: #111;
+      background-color: #fff;
+    }
+
+    .name-header {
+      position: fixed;
+      top: 0;
+      right: 0;
+      font-family: 'Anton', sans-serif;
+      font-size: 120px;
+      font-weight: 900;
+      margin: 0;
+      padding: 0;
+      color:black;
+      letter-spacing: -5px;
+    }
+
+
+    .resume-header {
+      font-family: 'Anton', sans-serif;
+      font-weight: 900;
+      font-size: 28px;
+      border-bottom: 2px solid #111;
+      width: fit-content;
+      margin-top: 0px;
+      margin-bottom: 100px;
+    }
+
+    .section-header {
+      font-family: 'Anton', sans-serif;
+      font-weight: 900;
+      font-size: 25px;
+      border-bottom: 2px solid #111;
+      width: fit-content;
+      margin-top: 10px;
+      margin-bottom: 20px;
+    }
+
+    .intro {
+      text-align: center;
+      margin-top: 60px;
+      margin-bottom: 40px;
+    }
+
+    .intro p {
+      margin: 2em 0;
+      font-size: 18px;
+    }
+
+    .personal-info {
+      margin-top: 30px;
+      display: flex;
+      justify-content: flex-start;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .info-table {
+      border-collapse: collapse;
+    }
+
+    .info-label {
+      font-weight: bold;
+      width: 100px;
+      vertical-align: top;
+      padding-right: 20px;
+    }
+
+    .info-value {
+      white-space: pre-wrap;
+    }
+
+    .divider {
+      border-top: 1px solid #aaa;
+      margin: 40px 0;
+    }
+
+
+    .two-column-section {
+  display: flex;
+  justify-content: space-between;
+  gap: 40px;
+}
+
+.column {
+  flex: 1;
+}
+
+.column ul {
+  padding-left: 0;
+  margin: 0;
+  list-style-position: inside;
+}
+
+.section-header {
+  font-family: 'Anton', sans-serif;
+  font-weight: 900;
+  font-size: 28px;
+  border-bottom: 2px solid #111;
+  width: fit-content;
+  margin-bottom: 20px;
+}
+
+@media screen and (max-width: 768px) {
+  .two-column-section {
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .name-header {
+    font-size: 72px; /* 모바일에선 조금 더 작게 */
+    letter-spacing: -6px;
+  }
+
+  .resume-header {
+    margin-bottom: 60px;
+  }
+}
+  </style>
 </head>
 <body>
-이력서페이지
+
+  <!-- 최상단 이름 -->
+  <div class="name-header">KIM SOO YEON</div> <br>
+
+  <!-- Resume 타이틀 -->
+  <div class="resume-header">Resume</div>
+
+  <!-- 인사말 -->
+  <div class="intro">
+    <p>만나서 반갑습니다!<br>백엔드 개발자 김수연입니다.</p>
+    <p>삶이 유기적이듯 코드도 그래야 한다고 믿습니다. <br>다정하고, 호흡하는 코드를 작성합니다.</p>
+  </div>
+
+  <!-- 개인정보 -->
+  <div class="personal-info">
+    <table class="info-table">
+      <tr>
+        <td class="info-label">me?</td>
+      </tr>
+      <tr>
+        <td class="info-label"></td>
+        <td class="info-value">김수연 (sukipi 수키피)<br>2000.02.03</td>
+      </tr>
+      <tr>
+        <td class="info-label">position</td>
+        <td class="info-value">Backend Engineer</td>
+      </tr>
+      <tr>
+        <td class="info-label">contact</td>
+        <td class="info-value">sotogitoarchive@gmail.com</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- 프로젝트 구분선 -->
+  <div class="divider"></div>
+  <div class="two-column-section">
+  <!-- 왼쪽: Skill -->
+  <div class="column">
+    <div class="section-header">Skill</div>
+    <ul>
+      <li>Java, JavaScript, Python</li>
+      <li>Spring Boot, JPA</li>
+      <li>MySQL, Redis</li>
+      <li>Docker, AWS EC2, GitHub Actions</li>
+    </ul>
+  </div>
+
+  <!-- 오른쪽: Education -->
+  <div class="column">
+    <div class="section-header">Education</div>
+    <ul>
+      <li>단국대학교 천안캠퍼스 학사 과정(2019.03 ~ 2023.08)</li>
+      <li>?????(2019.08 ~ 2023.11)</li>
+      <li>신세계아이엔씨 부트캠프 자바 백엔드 과정(2025.03 ~ 2025.08)</li>
+    </ul>
+  </div>
+
+</div>
+
+<div class="divider"></div>
+  <div class="column">
+    <div class="section-header">Portfolio</div>
+    <ul>
+      <li>단국대학교 천안캠퍼스 학사 과정(2019.03 ~ 2023.08)</li>
+      <li>?????(2019.08 ~ 2023.11)</li>
+      <li>신세계아이엔씨 부트캠프 자바 백엔드 과정(2025.03 ~ 2025.08)</li>
+    </ul>
+  </div>
+
+  <script>
+window.addEventListener('scroll', () => {
+  const nameHeader = document.querySelector('.name-header');
+  const scrollY = window.scrollY;
+
+  // 최대 흐려지는 정도 조절
+  const minOpacity = 0.07;
+  const maxOpacity = 1;
+
+  // 기준 스크롤 값 (300px 이상부터는 더 흐려지지 않음)
+  const fadeDistance = 500;
+
+  // 비율 계산
+  const opacity = Math.max(
+    minOpacity,
+    maxOpacity - (scrollY / fadeDistance)
+  );
+
+  nameHeader.style.opacity = opacity.toFixed(3); // 소수점 안정성
+});
+
+</script>
+
 </body>
 </html>

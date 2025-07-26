@@ -34,7 +34,7 @@ img {
   left: 50%;
   transform: translateX(-50%);
   font-size: 3rem;
-  font-weight: 800;
+  font-weight: 1000;
   color: black;
   z-index: 15;
   pointer-events: none;
@@ -48,6 +48,7 @@ img {
   bottom: 2%;
   color: black;
   font-size: 1.1rem;
+  font-weight: 1000;
   text-align: right;
   z-index: 10;
   pointer-events: none;
@@ -91,6 +92,11 @@ img {
 .container:hover .title-overlay,
 .container:hover .text-overlay {
   color: white;
+}
+.title-overlay,
+.text-overlay,
+.vertical-text{
+  font-family: 'Anton', sans-serif;
 }
 
 /* 📱 모바일 대응 (화면 너비 768px 이하) */
