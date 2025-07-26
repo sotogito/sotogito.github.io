@@ -1,0 +1,71 @@
+body {
+    margin: 0;
+    padding: 0;
+    background: #fff;
+    font-family: 'JetBrains Mono', monospace;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+  
+  .center-vertical {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+    margin-top: -20vh;
+  }
+  
+  .contact-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+  }
+  
+  .contact-name {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: black;
+  }
+  
+  .contact-email {
+    font-size: 0.9rem;
+    color: #555;
+  }
+  
+  .link-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+    margin-top: 1.5rem;
+  }
+  
+  .resume-link {
+    font-size: 1rem;
+    color: black;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  
+  @media screen and (max-width: 768px) {
+    .contact-name {
+      font-size: 1.2rem;
+    }
+  
+    .contact-email {
+      font-size: 0.9rem;
+    }
+  
+    .resume-link {
+      font-size: 1.2rem;
+    }
+  
+    .center-vertical {
+      gap: 2rem; /* 간격도 약간 줄임 */
+      margin-top: -3vh; /* 너무 위로 안 올라가게 조정 */
+    }
+  }
+  

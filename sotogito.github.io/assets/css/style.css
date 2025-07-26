@@ -1,0 +1,116 @@
+:root {
+  --font-mono: "JetBrains Mono", monospace;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  font-family: var(--font-mono);
+}
+
+img {
+  max-width: 90vw;
+  max-height: 90vh;
+  display: block;
+  height: auto;
+}
+
+.container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 기본(데스크탑 기준) */
+.title-overlay {
+  position: absolute;
+  top: 0%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 3rem;
+  font-weight: 800;
+  color: black;
+  z-index: 15;
+  pointer-events: none;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.text-overlay {
+  position: absolute;
+  right: 3%;
+  bottom: 2%;
+  color: black;
+  font-size: 1.1rem;
+  text-align: right;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.vertical-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 4rem;
+  font-weight: bold;
+  color: red;
+  z-index: 20;
+  opacity: 0;
+  text-align: center;
+  line-height: 1.5;
+  pointer-events: none;
+}
+
+.about-overlay {
+  position: absolute;
+  top: 47%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: red;
+  font-size: 1.4rem;
+  font-weight: bold;
+  z-index: 12;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+/* Hover 시 ---About--> 숨기기 */
+.container:hover .about-overlay {
+  opacity: 0;
+}
+
+
+/* hover 시 텍스트 색상 변경 */
+.container:hover .title-overlay,
+.container:hover .text-overlay {
+  color: white;
+}
+
+/* 📱 모바일 대응 (화면 너비 768px 이하) */
+@media screen and (max-width: 768px) {
+  .title-overlay {
+    font-size: 2rem;
+  }
+
+  .text-overlay {
+    font-size: 0.9rem;
+    right: 5%;
+    bottom: 3%;
+    text-align: right;
+  }
+
+  .vertical-text {
+    font-size: 2.5rem;
+  }
+
+  .about-overlay {
+    font-size: 1rem;
+  }
+}
