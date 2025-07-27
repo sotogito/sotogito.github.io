@@ -8,7 +8,7 @@
   <style>
     body {
       margin: 0; 
-      padding: 0 40px 1000px; 
+      padding: 0 40px; 
       font-family: 'JetBrains Mono', monospace;
       color: #111;
       background-color: #fff;
@@ -23,7 +23,7 @@
       font-weight: 900;
       margin: 0;
       padding: 0;
-      color:black;
+      color:rgb(0, 0, 0);
       letter-spacing: -5px;
     }
 
@@ -80,6 +80,7 @@
 
     .info-value {
       white-space: pre-wrap;
+      white-space: normal;
     }
 
     .divider {
@@ -104,6 +105,17 @@
   list-style-position: inside;
 }
 
+a {
+  color: inherit;
+  text-decoration: underline;
+}
+
+a:hover {
+  color: yellow;             
+  background-color: #111;   
+  text-decoration: none;   
+}
+
 
 @media screen and (max-width: 768px) {
   .two-column-section {
@@ -123,155 +135,55 @@
 
 
 
-
-
-
-
-.portfolio-grid {
+.more-about-section {
   display: flex;
-  gap: 40px;
-  margin-bottom: 20px;
+  flex-direction: column;
+  align-items: flex-start; /* ← 왼쪽 정렬 */
+  text-align: left;        /* ← 텍스트 왼쪽 정렬 */
+  padding-bottom: 100px;
+  padding-top: 50px;
 }
 
-.project-title {
-  flex: 4;
-  font-size: 16px;
-  display: flex;
-  flex-direction: column; 
-  align-items: flex-end;  
-  text-align: right;
-}
-
-
-.project-details {
-  flex: 6;
-  font-size: 14px;
-}
-
-.project-title .title {
-  font-size: 18px;  
-  font-weight: bold;
+.foreground-title {
+  font-size: 7vw;
+  font-family: 'Anton', sans-serif;
+  font-weight: 900;
+  color: #e7594c;
+  text-align: left;        /* ← 왼쪽 정렬 */
+  margin-bottom: 40px;
+  z-index: 2;
   text-decoration-line: underline;
 }
 
-.project-title .team {
-  font-size: small;
-  font-weight: bold;
-  margin-top: 3px;
-  margin-bottom: 10px;
-}
-
-
-.detail-table .project-description{
-  font-size: 18px;  
-}
-
-.project-title .duration {
-  font-size: small;
-}
-
-.detail-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.detail-table td {
-  padding-right: 8px;
-  padding-bottom: 20px;
-  padding-left: 8px;
-  vertical-align: top;
-}
-
-.detail-table .label {
-  width: 140px;
-  white-space: nowrap;
-  padding-right: 50px;
-}
-
-.detail-table .content {
-  width: 100%;
-}
-
-.project-divider {
-  border-top: 1px dashed #aaa;
-  margin-bottom: 50px;
-  margin-top: 14px;
-}
-
-.td-list {
-  padding-left: 18px;
-  margin: 4px 0;
-  list-style-type: none;
-}
-
-.td-list li {
-  margin-bottom: 4px;
-}
-
-.tech-stack-group {
-  display: inline-block;
-  line-height: 2;
-}
-
-.tech-item {
-  display: inline-block;
-  padding: 0px 5px;          /* ← 위아래 1px, 좌우 6px 정도가 거의 딱 붙음 */
-  margin: 3px 0px 0 0;
-  border: 1px solid #555;
-  border-radius: 0px;
-  font-size: 13px;
-  background: none;
-  background: none;
-  line-height: 1.3;  
-}
-
-.custom-link {
-  color: #0600c0;
-}
-
-.team-description {
-  color: #666;           /* 은은한 회색 */
-  font-size: 13px;       /* 필요 시 살짝 작게 */
-  line-height: 1.6;
-  padding-top: 4px;
+.kindness-description {
+  color: #0a02a5;
+  font-size: 1rem;
+  line-height: 1.8;
+  max-width: 700px;
+  margin: 0;               /* ← 가운데 정렬 제거 */
+  font-family: 'JetBrains Mono', monospace;
+  word-break: keep-all;
+  text-align: left;
 }
 
 @media screen and (max-width: 768px) {
-  .portfolio-grid {
-    flex-direction: column;
-    gap: 24px;
-  }
-
-  .project-title {
-    align-items: flex-start;
-    text-align: left;
-  }
-
-  .detail-table .label {
-    width: auto;
-    padding-right: 16px;
-  }
-
-  .detail-table tr {
-    display: flex;
-    flex-direction: column;
-    padding-bottom: 20px;
-  }
-
-  .detail-table td.label {
-    padding-bottom: 6px;
-    font-weight: bold;
-    font-size: 14px;
-  }
-
-  .detail-table td.content {
-    padding-left: 0;
+  .kindness-description {
+    font-size: 0.95rem;
   }
 }
 
-
-
+.scroll-top-footer {
+  width: 100%;
+  text-align: center;
+  padding: 1.5rem 0 0; /* 아래쪽 padding 0으로 */
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin: 0;              /* margin 제거 */
+  line-height: 1;         /* 공간 압축 */
+}
   </style>
+    <link rel="stylesheet" href="../assets/css/project-section.css">
 </head>
 <body>
 
@@ -302,8 +214,10 @@
         <td class="info-value">Backend Engineer</td>
       </tr>
       <tr>
-        <td class="info-label">contact</td>
-        <td class="info-value">sotogitoarchive@gmail.com</td>
+          <td class="info-label">contact</td>
+  <td class="info-value">
+    <a href="mailto:sotogitoarchive@gmail.com">sotogitoarchive@gmail.com</a>
+  </td>
       </tr>
       <tr>
         <td class="info-label">GitHub</td>
@@ -769,14 +683,38 @@
 
 
 
+<div class="divider" id="more-section"></div>
+<div class="more-about-section">
+  <div class="foreground-title">다정한 호모사피엔스, <br>다정한 코드</div>
 
-<div class="divider"></div>
-
-
-
-
+    <div class="kindness-description">
+    호모 사피엔스는 다른 인류, 이를테면 네안데르탈인과 비교하면 신체적으로 훨씬 약한 존재였습니다.<br>
+    그럼에도 우리는 끝내 살아남았고, 지구를 차지하게 되었습니다.<br><br>
+    호모 사피엔스가 오늘날까지 살아남은 이유는 무엇일까요?<br><br>
+    가장 큰 이유는 다정함이었습니다.<br><br>
+    협력하고, 공감하고, 연결되는 능력.<br>
+    그게 우리를 오래도록 지속 가능하게 만들었습니다.<br><br>
+    저는 다정한 개발을 지향합니다.<br><br>
+    코드도, 오늘날의 호모 사피엔스도 결국 다정한 것이 살아남는다고 믿습니다.
+  </div>
 </div>
 
+<!--
+- 개발을 좋아할 수밖에 없는 이유  
+오랜 시간 그림을 그렸습니다.  
+그림이 한 면의 표현이었다면, 개발은 세계를 구축하는 도구였습니다.  
+저는 개발에서 무엇이든 만들어낼 수 있다는 감각을 처음 느꼈습니다.  
+그래서 개발을 좋아하지 않을 수 없습니다.
+
+- 객체지향에서 유기체를 느끼다
+처음 객체지향을 접했을 때, 인간의 생명 유지 방식과 많이 닮아 있다고 느꼈습니다. 
+차가워 보이던 기술 시스템 안에서 유기적인 공감을 느꼈고, 개발에 깊은 흥미를 가지게 되었습니다.  
+살아 움직이는 시스템을 만들고자 합니다.  
+그것이 제가 지향하는 개발입니다.
+
+- 제가 가장 좋아하는 건, 꼼지락 꼼지락거리는 일입니다.  
+작은 것도 지나치지 않습니다. 하찮아 보이는 것에도 집요하게 몰입할 수 있습니다. 그림을 그릴 때도, 설계를 할 때도, 개발을 할 때도 마찬가지였습니다. 꼼지락 꼼지락거리는 일은 제가 가장 좋아하고, 가장 잘하는 일입니다.
+-->
 
 
 
@@ -785,27 +723,33 @@
 
 
 
-  <script>
+<script>
 window.addEventListener('scroll', () => {
   const nameHeader = document.querySelector('.name-header');
+  const moreAboutSection = document.querySelector('#more-section');
   const scrollY = window.scrollY;
 
-  // 최대 흐려지는 정도 조절
   const minOpacity = 0.07;
   const maxOpacity = 1;
-
-  // 기준 스크롤 값 (300px 이상부터는 더 흐려지지 않음)
   const fadeDistance = 500;
 
-  // 비율 계산
-  const opacity = Math.max(
-    minOpacity,
-    maxOpacity - (scrollY / fadeDistance)
-  );
+  const moreAboutTop = moreAboutSection.getBoundingClientRect().top + window.scrollY;
 
-  nameHeader.style.opacity = opacity.toFixed(3); // 소수점 안정성
+  // 섹션에 도달하면 name-header는 완전 투명
+  if (scrollY >= moreAboutTop - 100) {
+    nameHeader.style.opacity = 0;
+  } else {
+    const opacity = Math.max(
+      minOpacity,
+      maxOpacity - (scrollY / fadeDistance)
+    );
+    nameHeader.style.opacity = opacity.toFixed(3);
+  }
 });
 
+function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 </script>
 
 </body>

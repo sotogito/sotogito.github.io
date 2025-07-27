@@ -1,0 +1,142 @@
+
+.portfolio-grid {
+  display: flex;
+  gap: 40px;
+  margin-bottom: 20px;
+}
+
+.project-title {
+  flex: 4;
+  font-size: 16px;
+  display: flex;
+  flex-direction: column; 
+  align-items: flex-end;  
+  text-align: right;
+}
+
+
+.project-details {
+  flex: 6;
+  font-size: 14px;
+}
+
+.project-title .title {
+  font-size: 18px;  
+  font-weight: bold;
+  text-decoration-line: underline;
+}
+
+.project-title .team {
+  font-size: small;
+  font-weight: bold;
+  margin-top: 3px;
+  margin-bottom: 10px;
+}
+
+
+.detail-table .project-description{
+  font-size: 18px;  
+}
+
+.project-title .duration {
+  font-size: small;
+}
+
+.detail-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.detail-table td {
+  padding-right: 8px;
+  padding-bottom: 20px;
+  padding-left: 8px;
+  vertical-align: top;
+}
+
+.detail-table .label {
+  width: 140px;
+  white-space: nowrap;
+  padding-right: 50px;
+}
+
+.detail-table .content {
+  width: 100%;
+}
+
+.project-divider {
+  border-top: 1px dashed #aaa;
+  margin-bottom: 50px;
+  margin-top: 14px;
+}
+
+.td-list {
+  padding-left: 18px;
+  margin: 4px 0;
+  list-style-type: none;
+}
+
+.td-list li {
+  margin-bottom: 4px;
+}
+
+.tech-stack-group {
+  display: inline-block;
+  line-height: 2;
+}
+
+.tech-item {
+  display: inline-block;
+  padding: 0px 5px;          /* ← 위아래 1px, 좌우 6px 정도가 거의 딱 붙음 */
+  margin: 3px 0px 0 0;
+  border: 1px solid #555;
+  border-radius: 0px;
+  font-size: 13px;
+  background: none;
+  background: none;
+  line-height: 1.3;  
+}
+
+.custom-link {
+  color: #0600c0;
+}
+
+.team-description {
+  color: #666;           /* 은은한 회색 */
+  font-size: 13px;       /* 필요 시 살짝 작게 */
+  line-height: 1.6;
+  padding-top: 4px;
+}
+
+@media screen and (max-width: 768px) {
+  .portfolio-grid {
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .project-title {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .detail-table .label {
+    width: auto;
+    padding-right: 16px;
+  }
+
+  .detail-table tr {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 20px;
+  }
+
+  .detail-table td.label {
+    padding-bottom: 6px;
+    font-weight: bold;
+    font-size: 14px;
+  }
+
+  .detail-table td.content {
+    padding-left: 0;
+  }
+}
