@@ -13,110 +13,104 @@ body {
   font-family: var(--font-mono);
 }
 
-img {
-  max-width: 90vw;
-  max-height: 90vh;
-  display: block;
-  height: auto;
-}
-
 .container {
-  position: relative;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
+  position: relative;
 }
 
-/* 기본(데스크탑 기준) */
-.title-overlay {
-  position: absolute;
-  top: 0%;
-  left: 50%;
-  transform: translateX(-50%);
+.brand-name {
+  margin-bottom: -15px;
   font-size: 3rem;
   font-weight: 1000;
-  color: black;
-  z-index: 15;
-  pointer-events: none;
   text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.text-overlay {
-  position: absolute;
-  right: 3%;
-  bottom: 2%;
-  color: black;
-  font-size: 1.1rem;
-  font-weight: 1000;
-  text-align: right;
-  z-index: 10;
-  pointer-events: none;
-}
-
-.vertical-text {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 4rem;
-  font-weight: bold;
-  color: red;
-  z-index: 20;
-  opacity: 0;
+  font-family: 'Anton', sans-serif;
   text-align: center;
-  line-height: 1.5;
-  pointer-events: none;
 }
 
-.about-overlay {
+#main-img {
+  max-width: 80vw;
+  max-height: 80vh;
+  display: block;
+  transform: translateX(-9px);
+  position: relative;
+}
+
+.overlay-about {
   position: absolute;
-  top: 47%;
+  top: 42%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: red;
-  font-size: 1.4rem;
+  font-size: 1vw;
   font-weight: bold;
-  z-index: 12;
+  color: rgb(255, 8, 0);
+  font-family: var(--font-mono);
   pointer-events: none;
+  z-index: 12;
   transition: opacity 0.3s ease;
 }
 
-/* Hover 시 ---About--> 숨기기 */
-.container:hover .about-overlay {
+.overlay-vertical {
+  position: absolute;
+  top: 43%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 3.5vw;
+  font-weight: bold;
+  color: red;
+  font-family: 'Anton', sans-serif;
+  line-height: 1.5;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 20;
+  text-align: center;
+  transition: opacity 0.3s ease;
+}
+
+.brand-slogan {
+  margin-top: -4px;
+  font-size: 1.1rem;
+  font-weight: 1000;
+  text-align: center;
+  line-height: 1.8;
+  font-family: 'Anton', sans-serif;
+  color: black;
+   transform: translateX(6px);
+}
+
+.container:hover .overlay-about {
   opacity: 0;
 }
 
-
-/* hover 시 텍스트 색상 변경 */
-.container:hover .title-overlay,
-.container:hover .text-overlay {
-  color: white;
-}
-.title-overlay,
-.text-overlay,
-.vertical-text{
-  font-family: 'Anton', sans-serif;
+.container:hover .brand-name {
+  color: rgba(0, 0, 0, 0.85);
 }
 
-/* 📱 모바일 대응 (화면 너비 768px 이하) */
 @media screen and (max-width: 768px) {
-  .title-overlay {
+  .brand-name {
     font-size: 2rem;
+    margin-bottom: -2px;
   }
 
-  .text-overlay {
-    font-size: 0.9rem;
-    right: 5%;
-    bottom: 3%;
-    text-align: right;
-  }
-
-  .vertical-text {
-    font-size: 2.5rem;
-  }
-
-  .about-overlay {
+  .overlay-about {
     font-size: 1rem;
+    top: 40%;
+  }
+
+  .overlay-vertical {
+    font-size: 2.5rem;
+    top: 45%;
+  }
+
+  .brand-slogan {
+    font-size: 0.9rem;
+    margin-top: 0.7rem;
+    line-height: 1.6;
+  }
+
+  #main-img {
+    max-width: 90vw;
+    max-height: 60vh;
   }
 }

@@ -1,71 +1,82 @@
 body {
-    margin: 0;
-    padding: 0;
-    background: #fff;
-    font-family: 'JetBrains Mono', monospace;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-  }
-  
+  margin: 0;
+  padding: 0;
+  background: #fff;
+  font-family: 'JetBrains Mono', monospace;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.center-vertical {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.5rem;
+  margin-top: -15vh; /* 살짝 위로 */
+}
+
+.contact-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.contact-name {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: black;
+}
+
+.contact-email {
+  font-size: 1rem;
+  color: black;
+}
+
+.link-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.link-value {
+  font-size: 1rem;
+  color: black;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.link-value a {
+  color: black;
+  text-decoration: inherit;
+}
+
+
+.link-value a:hover {
+  color: white;             
+  background-color: #111;   
+  text-decoration: none;    
+}
+
+
+@media screen and (max-width: 768px) {
   .center-vertical {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 3rem;
-    margin-top: -20vh;
+    margin-top: -6vh;
+    gap: 2rem;
   }
-  
-  .contact-block {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.3rem;
-  }
-  
+
   .contact-name {
-    font-size: 1.1rem;
-    font-weight: bold;
-    color: black;
+    font-size: 5.5vw;
   }
-  
+
   .contact-email {
-    font-size: 0.9rem;
-    color: #555;
+    font-size: 4vw;
   }
-  
-  .link-block {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.8rem;
-    margin-top: 1.5rem;
+
+  .link-value {
+    font-size: 4.5vw;
   }
-  
-  .resume-link {
-    font-size: 1rem;
-    color: black;
-    text-decoration: underline;
-    text-underline-offset: 4px;
-  }
-  
-  @media screen and (max-width: 768px) {
-    .contact-name {
-      font-size: 1.2rem;
-    }
-  
-    .contact-email {
-      font-size: 0.9rem;
-    }
-  
-    .resume-link {
-      font-size: 1.2rem;
-    }
-  
-    .center-vertical {
-      gap: 2rem; /* 간격도 약간 줄임 */
-      margin-top: -3vh; /* 너무 위로 안 올라가게 조정 */
-    }
-  }
-  
+}
