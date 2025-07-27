@@ -236,6 +236,41 @@
   padding-top: 4px;
 }
 
+@media screen and (max-width: 768px) {
+  .portfolio-grid {
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .project-title {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .detail-table .label {
+    width: auto;
+    padding-right: 16px;
+  }
+
+  .detail-table tr {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 20px;
+  }
+
+  .detail-table td.label {
+    padding-bottom: 6px;
+    font-weight: bold;
+    font-size: 14px;
+  }
+
+  .detail-table td.content {
+    padding-left: 0;
+  }
+}
+
+
+
   </style>
 </head>
 <body>
@@ -305,11 +340,6 @@
     </ul>
   </div>
 </div>
-
-
-
-
-
 
 <div class="divider"></div>
 <div class="section-header">Portfolio</div>
@@ -732,11 +762,15 @@
             </td>
           </tr>
         </table>
-        <hr class="project-divider">
       </div>
     </div>
   </div>
 </div>
+
+
+
+
+<div class="divider"></div>
 
 
 
