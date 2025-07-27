@@ -31,7 +31,7 @@
     .resume-header {
       font-family: 'Anton', sans-serif;
       font-weight: 900;
-      font-size: 28px;
+      font-size: 30px;
       border-bottom: 2px solid #111;
       width: fit-content;
       margin-top: 0px;
@@ -104,14 +104,6 @@
   list-style-position: inside;
 }
 
-.section-header {
-  font-family: 'Anton', sans-serif;
-  font-weight: 900;
-  font-size: 28px;
-  border-bottom: 2px solid #111;
-  width: fit-content;
-  margin-bottom: 20px;
-}
 
 @media screen and (max-width: 768px) {
   .two-column-section {
@@ -128,6 +120,122 @@
     margin-bottom: 60px;
   }
 }
+
+
+
+
+
+
+
+.portfolio-grid {
+  display: flex;
+  gap: 40px;
+  margin-bottom: 20px;
+}
+
+.project-title {
+  flex: 4;
+  font-size: 16px;
+  display: flex;
+  flex-direction: column; 
+  align-items: flex-end;  
+  text-align: right;
+}
+
+
+.project-details {
+  flex: 6;
+  font-size: 14px;
+}
+
+.project-title .title {
+  font-size: 18px;  
+  font-weight: bold;
+  text-decoration-line: underline;
+}
+
+.project-title .team {
+  font-size: small;
+  font-weight: bold;
+  margin-top: 3px;
+  margin-bottom: 10px;
+}
+
+
+.detail-table .project-description{
+  font-size: 18px;  
+}
+
+.project-title .duration {
+  font-size: small;
+}
+
+.detail-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.detail-table td {
+  padding-right: 8px;
+  padding-bottom: 20px;
+  padding-left: 8px;
+  vertical-align: top;
+}
+
+.detail-table .label {
+  width: 140px;
+  white-space: nowrap;
+  padding-right: 50px;
+}
+
+.detail-table .content {
+  width: 100%;
+}
+
+.project-divider {
+  border-top: 1px dashed #aaa;
+  margin-bottom: 50px;
+  margin-top: 14px;
+}
+
+.td-list {
+  padding-left: 18px;
+  margin: 4px 0;
+  list-style-type: none;
+}
+
+.td-list li {
+  margin-bottom: 4px;
+}
+
+.tech-stack-group {
+  display: inline-block;
+  line-height: 2;
+}
+
+.tech-item {
+  display: inline-block;
+  padding: 0px 5px;          /* ← 위아래 1px, 좌우 6px 정도가 거의 딱 붙음 */
+  margin: 3px 0px 0 0;
+  border: 1px solid #555;
+  border-radius: 0px;
+  font-size: 13px;
+  background: none;
+  background: none;
+  line-height: 1.3;  
+}
+
+.custom-link {
+  color: #0600c0;
+}
+
+.team-description {
+  color: #666;           /* 은은한 회색 */
+  font-size: 13px;       /* 필요 시 살짝 작게 */
+  line-height: 1.6;
+  padding-top: 4px;
+}
+
   </style>
 </head>
 <body>
@@ -141,7 +249,7 @@
   <!-- 인사말 -->
   <div class="intro">
     <p>만나서 반갑습니다!<br>백엔드 개발자 김수연입니다.</p>
-    <p>삶이 유기적이듯 코드도 그래야 한다고 믿습니다. <br>다정하고, 호흡하는 코드를 작성합니다.</p>
+    <p>삶이 유기적이듯 코드도 그래야 한다고 믿습니다. <br>다정하고, 호흡하는 코드를 작성합니다(시스템을추구합니다?).</p>
   </div>
 
   <!-- 개인정보 -->
@@ -161,6 +269,14 @@
       <tr>
         <td class="info-label">contact</td>
         <td class="info-value">sotogitoarchive@gmail.com</td>
+      </tr>
+      <tr>
+        <td class="info-label">GitHub</td>
+        <td class="info-value"><a class="custom-link" href="https://github.com/sotogito" target="_blank">sotogito</a></td>
+      </tr>
+      <tr>
+        <td class="info-label">Docs (Blog)</td>
+        <td class="info-value"><a class="custom-link" href="https://github.com/sotogito/organism.docs" target="_blank">유기체.docs</a></td>
       </tr>
     </table>
   </div>
@@ -188,18 +304,206 @@
       <li>신세계아이엔씨 부트캠프 자바 백엔드 과정(2025.03 ~ 2025.08)</li>
     </ul>
   </div>
+</div>
+
+
+
+
+
+
+<div class="divider"></div>
+<div class="section-header">Portfolio</div>
+
+<!-- 1. 누들집 -->
+<div class="portfolio-section">
+  <div class="portfolio-item">
+    <div class="portfolio-grid">
+      <!-- 좌측 -->
+      <div class="project-title">
+        <div class="title">Noodle.zip 누들집</div>
+        <div class="team">Team ZIP.LAP 집랩</div>
+        <div class="duration">2025.06 ~ 현재</div>
+      </div>
+      <!-- 우측 -->
+      <div class="project-details">
+        <table class="detail-table">
+          <tr>
+            <td class="label"></td>
+            <td class="project-description">대한민국 최초, 라멘 마니아를 위한 검색 특화 커뮤니티 플랫폼</td>
+          </tr>
+          <tr>
+            <td class="label"></td>
+            <td class="team-description">
+                팀 ZIP.LAP은 부트캠프에서 만난 서로 다른 개성을 가진 팀원들이 모여 결성된 팀입니다.  
+                ‘누들집’은 수료 이후에도 지속적으로 협업을 이어가고 있는 프로젝트로, 실제 서비스를 목표로 한 팀워크 중심의 커뮤니티 프로젝트입니다.
+            </td>
+          </tr>
+          <tr>
+            <td class="label">주요 기능</td>
+            <td class="content">
+                <ul class="td-list">
+                  <li>- 위치 기반 국내 매장 검색</li>
+                  <li>- 라멘 카테고리 및 토핑 등 구체적인 검색 기능 제공</li>
+                  <li>- 라멘에 특화된 상세한 맛 평가 시스템</li>
+                  <li>- OCR 기반 영수증 리뷰 등록</li>
+                  <li>- 이벤트 기반 배지 시스템</li>
+                </ul>
+            </td>
+          </tr>
+          <tr>
+            <td class="label">담당 역할</td>
+            <td class="content">
+              <ul class="td-list">
+                  <li>- Spring 이벤트 리스너와 비동기 처리를 활용한 이벤트 기반 배지 시스템 구현</li>
+                  <li>- 카테고리 기반 라멘 매장 위시리스트 저장 및 네이버 지도 API로 시각화</li>
+                  <li>- 사용자 커뮤니티의 카테고리별 게시글 조회 및 필터링 기능 구현 (Enum적극활용)</li>
+                  <li>- 구독 기능 구현</li>
+                  <li>- ERD 설계 및 관계 정의</li>
+                </ul>
+            </td>
+          </tr>
+          <tr>
+            <td class="label">기술 스택</td>
+            <td class="content">
+               <div class="tech-stack-group">
+                  <span class="tech-item">Java</span>
+                  <span class="tech-item">Spring Boot</span>
+                  <span class="tech-item">JPA</span>
+                  <span class="tech-item">MyBatis</span>
+                  <span class="tech-item">QueryDSL</span>
+                  <br>
+                  <span class="tech-item">JavaScript</span>
+                  <span class="tech-item">HTML/CSS</span>
+                  <span class="tech-item">Thymeleaf</span>
+                  <br>
+                  <span class="tech-item">Redis</span>
+                  <br>
+                  <span class="tech-item">Naver Map API</span>
+                  <span class="tech-item">Kakao Local API</span>
+                </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="label">자료 링크</td>
+            <td class="content">
+              <a class="custom-link" href="https://noodlezip.kr/" target="_blank">배포 URL</a> | 
+              <a class="custom-link" href="https://github.com/20250123-SSG/final-noodle-zip" target="_blank">GitHub</a> | 
+              <a class="custom-link" href="https://www.erdcloud.com/team/yryort54TR4WynAFM" target="_blank">ERDCloud</a> | 
+              <a class="custom-link" href="https://ohgiraffers.notion.site/zip-lab-20d649136c11807a9258eb4729ebce64?source=copy_link" target="_blank">Notion</a> | 
+              <a class="custom-link" href="https://docs.google.com/spreadsheets/d/1pQlDkWOhMYdiOyYTpTDqrHLObNjFpZxG6JRY0jxXw2w/edit?gid=360730749#gid=360730749" target="_blank">WBS</a> | 
+              <a class="custom-link" href="https://github.com/sotogito/noodleZip.docs" target="_blank">개인 프로젝트 문서</a>
+            </td>
+          </tr>
+        </table>
+        <hr class="project-divider">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- 2. 나가게전에 -->
+<div class="portfolio-section">
+  <div class="portfolio-item">
+    <div class="portfolio-grid">
+      <!-- 좌측 -->
+      <div class="project-title">
+        <div class="title">BeforeGoing 나가기전에</div>
+        <div class="team">Team UND</div>
+        <div class="duration">2025.06 ~ 현재</div>
+      </div>
+      <!-- 우측 -->
+      <div class="project-details">
+        <table class="detail-table">
+          <tr>
+            <td class="label"></td>
+            <td class="project-description">대한민국 최초, 라멘 마니아를 위한 검색 특화 커뮤니티 플랫폼</td>
+          </tr>
+          <tr>
+            <td class="label"></td>
+            <td class="team-description">
+              팀 UND는 학창 시절을 함께한 친구들이 결성한 팀으로, 기획자 1명, 디자이너 1명, 안드로이드 개발자 1명, 인프라 담당 1명, 백엔드 개발자 1명으로 구성되어 있습니다.  
+              ‘나가기 전에’는 팀이 처음으로 함께 기획하고 만든 첫 프로젝트로, 서로의 역량을 맞춰보며 협업의 기반을 다진 의미 있는 시작점입니다.
+            </td>
+          </tr>
+          <tr>
+            <td class="label">주요 기능</td>
+            <td class="content">
+                <ul class="td-list">
+                  <li>- 위치 기반 국내 매장 검색</li>
+                  <li>- 라멘 카테고리 및 토핑 등 구체적인 검색 기능 제공</li>
+                  <li>- 라멘에 특화된 상세한 맛 평가 시스템</li>
+                  <li>- OCR 기반 영수증 리뷰 등록</li>
+                  <li>- 이벤트 기반 배지 시스템</li>
+                </ul>
+            </td>
+          </tr>
+          <tr>
+            <td class="label">담당 역할</td>
+            <td class="content">
+              <ul class="td-list">
+                  <li>- Spring 이벤트 리스너와 비동기 처리를 활용한 이벤트 기반 배지 시스템 구현</li>
+                  <li>- 카테고리 기반 라멘 매장 위시리스트 저장 및 네이버 지도 API로 시각화</li>
+                  <li>- 사용자 커뮤니티의 카테고리별 게시글 조회 및 필터링 기능 구현 (Enum적극활용)</li>
+                  <li>- 구독 기능 구현</li>
+                  <li>- ERD 설계 및 관계 정의</li>
+                </ul>
+            </td>
+          </tr>
+          <tr>
+            <td class="label">기술 스택</td>
+            <td class="content">
+               <div class="tech-stack-group">
+                  <span class="tech-item">Java</span>
+                  <span class="tech-item">Spring Boot</span>
+                  <span class="tech-item">JPA</span>
+                  <span class="tech-item">MyBatis</span>
+                  <span class="tech-item">QueryDSL</span>
+                  <br>
+                  <span class="tech-item">JavaScript</span>
+                  <span class="tech-item">HTML/CSS</span>
+                  <span class="tech-item">Thymeleaf</span>
+                  <br>
+                  <span class="tech-item">Redis</span>
+                  <br>
+                  <span class="tech-item">Naver Map API</span>
+                  <span class="tech-item">Kakao Local API</span>
+                </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="label">자료 링크</td>
+            <td class="content">
+              <a class="custom-link" href="https://noodlezip.kr/" target="_blank">배포 URL</a> | 
+              <a class="custom-link" href="https://github.com/20250123-SSG/final-noodle-zip" target="_blank">GitHub</a> | 
+              <a class="custom-link" href="https://www.erdcloud.com/team/yryort54TR4WynAFM" target="_blank">ERDCloud</a> | 
+              <a class="custom-link" href="https://ohgiraffers.notion.site/zip-lab-20d649136c11807a9258eb4729ebce64?source=copy_link" target="_blank">Notion</a> | 
+              <a class="custom-link" href="https://docs.google.com/spreadsheets/d/1pQlDkWOhMYdiOyYTpTDqrHLObNjFpZxG6JRY0jxXw2w/edit?gid=360730749#gid=360730749" target="_blank">WBS</a> | 
+              <a class="custom-link" href="https://github.com/sotogito/noodleZip.docs" target="_blank">개인 프로젝트 문서</a>
+            </td>
+          </tr>
+        </table>
+        <hr class="project-divider">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
 
 </div>
 
-<div class="divider"></div>
-  <div class="column">
-    <div class="section-header">Portfolio</div>
-    <ul>
-      <li>단국대학교 천안캠퍼스 학사 과정(2019.03 ~ 2023.08)</li>
-      <li>?????(2019.08 ~ 2023.11)</li>
-      <li>신세계아이엔씨 부트캠프 자바 백엔드 과정(2025.03 ~ 2025.08)</li>
-    </ul>
-  </div>
+
+
+
+
+
+
+
 
   <script>
 window.addEventListener('scroll', () => {
