@@ -51,26 +51,30 @@ body {
   }
 
   .line {
-    flex-wrap: wrap;
+    flex-direction: column;
     align-items: flex-start;
     height: auto;
+    margin-bottom: 40px;
   }
 
   .label {
-    font-size: 60px;
-    flex-shrink: 0;
+    font-size: 48px;
+    height: auto;
+    padding-bottom: 0;
+    margin-bottom: 10px;
   }
 
   .thumb {
-    height: 60px;
-    flex-shrink: 0;
+    width: 100%;
+    height: auto;
+    margin-left: 0;
+    margin-bottom: 10px;
   }
 
   .desc {
-    flex-basis: 100%;
     margin-left: 0;
-    margin-top: 15px;
+    margin-top: 0;
     height: auto;
-    order: 3;
+    font-size: 14px;
   }
 }
