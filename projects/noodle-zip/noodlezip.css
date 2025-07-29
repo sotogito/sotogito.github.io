@@ -1,29 +1,33 @@
 body {
-  background: #fdfbf2;
+  background: #fffef5;
   margin: 0;
   padding: 80px;
   font-family: 'Noto Sans KR', sans-serif;
   color: #111;
 }
 
+.scene-description {
+  margin-bottom: 100px;
+}
+
 .line {
   display: flex;
   align-items: center;
   margin-bottom: 30px;
-  height: 74px;
+  height: 93px;
 }
 
 .label {
-  font-size: 100px;
+  font-size: 130px;
   font-family: 'Playfair Display', serif;
-  color: #ff8a00;
+  color: #e96236;
   line-height: 1;
   display: flex;
   align-items: center;
   height: 100%;
   margin: 0;
   padding: 0;
-  padding-bottom: 13px;
+  padding-bottom: 15px;
 }
 
 .thumb {
@@ -78,3 +82,39 @@ body {
     font-size: 14px;
   }
 }
+
+
+
+
+
+
+
+.logo-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 50px;
+  margin-bottom: 150px;
+  
+}
+
+.logo-section img {
+  width: 100%;         /* 부모 너비에 맞게 줄어듦 */
+  max-width: 600px;    /* 최대 600px까지만 커짐 */
+  height: auto;
+  margin-bottom: 50px;
+}
+
+.description {
+  text-align: center;
+  font-family: 'JetBrains Mono', monospace;
+  margin-top: 24px;
+  font-size: 16px;
+  line-height: 1.8;
+  color: #111;
+  max-width: 600px;
+  padding: 0 20px;
+}
+
+
+
