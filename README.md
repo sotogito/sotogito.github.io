@@ -1,1 +1,1 @@
-https://sotogito.github.io/
+http://www.sukipi.me/
