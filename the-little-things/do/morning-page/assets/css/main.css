@@ -560,6 +560,9 @@ body {
 }
 
 .heatmap-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 16px;
 }
 
@@ -569,8 +572,28 @@ body {
     color: #333;
 }
 
+.stats-toggle-btn {
+    display: block;
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+.stats-toggle-btn:hover {
+    background-color: #f0f0f0;
+}
+
 .heatmap-container {
     overflow-x: auto;
+    display: none;
+}
+
+.heatmap-container.show {
+    display: block;
 }
 
 .heatmap {

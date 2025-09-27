@@ -247,6 +247,12 @@ class MorningPagesApp {
 
         // 윈도우 리사이즈 이벤트
         window.addEventListener('resize', debounce(this.handleResize.bind(this), 250));
+
+        // 작성 현황 토글 버튼
+        const statsToggle = document.getElementById('stats-toggle');
+        if (statsToggle) {
+            statsToggle.addEventListener('click', this.toggleStats.bind(this));
+        }
     }
 
     // 로그인 시도 (수키피 확인 먼저)
@@ -595,6 +601,11 @@ class MorningPagesApp {
                 if (isEditable) {
                     saveBtn.textContent = '저장하기';
                     showSuccess('저장되었습니다. 계속 편집할 수 있습니다.');
+                    
+                    // 히트맵 업데이트 이벤트 발생
+                    document.dispatchEvent(new CustomEvent('fileSaved', {
+                        detail: { fileName, content: editor.value }
+                    }));
                 } else {
                     // 하루가 지났으면 읽기 전용
                     window.editorManager.disableEditor();
@@ -788,6 +799,14 @@ class MorningPagesApp {
         this.updateWritingTime();
         this.updateCharCount();
         this.updatePreview();
+    }
+
+    // 작성 현황 토글
+    toggleStats() {
+        const heatmapContainer = document.getElementById('heatmap');
+        if (heatmapContainer) {
+            heatmapContainer.classList.toggle('show');
+        }
     }
     
     // 메인 화면 이벤트 바인딩

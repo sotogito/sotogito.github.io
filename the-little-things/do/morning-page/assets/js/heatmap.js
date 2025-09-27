@@ -15,6 +15,26 @@ class HeatmapManager {
         if (this.heatmapContainer) {
             this.loadCommitData();
         }
+        
+        // 파일 저장 시 히트맵 업데이트
+        this.bindFileSaveEvent();
+    }
+
+    // 파일 저장 이벤트 바인딩
+    bindFileSaveEvent() {
+        // 전역 이벤트 리스너로 파일 저장 감지
+        document.addEventListener('fileSaved', (event) => {
+            this.refreshHeatmap();
+        });
+    }
+
+    // 히트맵 새로고침
+    async refreshHeatmap() {
+        try {
+            await this.loadCommitData();
+        } catch (error) {
+            console.error('Failed to refresh heatmap:', error);
+        }
     }
 
     // 커밋 데이터 로드
