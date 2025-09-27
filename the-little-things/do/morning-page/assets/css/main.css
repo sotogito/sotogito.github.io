@@ -221,9 +221,50 @@ body {
 /* Sidebar */
 .sidebar {
     width: 280px;
+    min-width: 200px;
+    max-width: 600px;
     background-color: #fff;
     border-right: 1px solid #e1e1e1;
     overflow-y: auto;
+    position: relative;
+}
+
+/* Resize Handle */
+.resize-handle {
+    width: 4px;
+    background-color: transparent;
+    cursor: col-resize;
+    position: relative;
+    z-index: 10;
+    transition: background-color 0.2s ease;
+}
+
+.resize-handle:hover {
+    background-color: #007acc;
+}
+
+.resize-handle:active {
+    background-color: #005a9e;
+}
+
+.resize-handle::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -2px;
+    right: -2px;
+    bottom: 0;
+    background-color: transparent;
+}
+
+/* Resizing 상태 */
+.resizing {
+    user-select: none;
+    cursor: col-resize;
+}
+
+.resizing * {
+    pointer-events: none;
 }
 
 .sidebar-header {
@@ -805,10 +846,16 @@ body {
     }
     
     .sidebar {
-        width: 100%;
+        width: 100% !important;
         height: 150px;
         border-right: none;
         border-bottom: 1px solid #e1e1e1;
+        min-width: unset;
+        max-width: unset;
+    }
+    
+    .resize-handle {
+        display: none; /* 모바일에서는 리사이즈 핸들 숨김 */
     }
     
     .editor-section {

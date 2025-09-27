@@ -15,6 +15,7 @@ class FileManager {
     init() {
         this.fileTree = document.getElementById('file-tree');
         this.bindEvents();
+        this.initResizeHandle();
     }
 
     // 이벤트 바인딩
@@ -542,6 +543,81 @@ class FileManager {
     addVirtualFolder(folderPath) {
         this.virtualFolders.add(folderPath);
         this.renderFileTree();
+    }
+
+    // 리사이즈 핸들 초기화
+    initResizeHandle() {
+        const resizeHandle = document.getElementById('sidebar-resize-handle');
+        const sidebar = document.getElementById('sidebar');
+        
+        if (!resizeHandle || !sidebar) return;
+
+        // 저장된 사이드바 너비 로드
+        const savedWidth = localStorage.getItem('sidebar-width');
+        if (savedWidth) {
+            sidebar.style.width = savedWidth + 'px';
+        }
+
+        let isResizing = false;
+        let startX = 0;
+        let startWidth = 0;
+
+        // 마우스 다운 이벤트
+        resizeHandle.addEventListener('mousedown', (e) => {
+            isResizing = true;
+            startX = e.clientX;
+            startWidth = sidebar.offsetWidth;
+            
+            // 리사이징 상태 클래스 추가
+            document.body.classList.add('resizing');
+            
+            // 마우스 커서 변경
+            document.body.style.cursor = 'col-resize';
+            
+            e.preventDefault();
+        });
+
+        // 마우스 이동 이벤트
+        document.addEventListener('mousemove', (e) => {
+            if (!isResizing) return;
+
+            const deltaX = e.clientX - startX;
+            const newWidth = startWidth + deltaX;
+            const minWidth = 200;
+            const maxWidth = 600;
+
+            // 최소/최대 너비 제한
+            const clampedWidth = Math.max(minWidth, Math.min(maxWidth, newWidth));
+            
+            sidebar.style.width = clampedWidth + 'px';
+        });
+
+        // 마우스 업 이벤트
+        document.addEventListener('mouseup', () => {
+            if (!isResizing) return;
+
+            isResizing = false;
+            
+            // 리사이징 상태 클래스 제거
+            document.body.classList.remove('resizing');
+            
+            // 마우스 커서 복원
+            document.body.style.cursor = '';
+            
+            // 새로운 너비 저장
+            const newWidth = sidebar.offsetWidth;
+            localStorage.setItem('sidebar-width', newWidth.toString());
+        });
+
+        // ESC 키로 리사이징 취소
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && isResizing) {
+                isResizing = false;
+                document.body.classList.remove('resizing');
+                document.body.style.cursor = '';
+                sidebar.style.width = startWidth + 'px';
+            }
+        });
     }
 }
 
