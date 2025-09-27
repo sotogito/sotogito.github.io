@@ -73,7 +73,6 @@
                     <div class="sidebar-header">
                         <h3>파일</h3>
                         <div class="sidebar-actions">
-                            <button id="new-folder-btn" class="sidebar-btn" title="새 폴더">📁</button>
                             <button id="new-file-btn" class="sidebar-btn" title="새 파일">📄</button>
                         </div>
                     </div>
@@ -173,22 +172,20 @@
         </div>
     </div>
 
-    <!-- 파일/폴더 생성 모달 -->
-    <div id="create-modal" class="modal hidden">
-        <div class="modal-content">
+    <!-- 파일/폴더 생성 모달 (완전히 새로 작성) -->
+    <div id="create-modal" class="modal hidden" style="z-index: 9999;">
+        <div class="modal-content" style="pointer-events: auto;">
             <div class="modal-header">
                 <h3 id="create-modal-title">새 파일 생성</h3>
-                <button class="modal-close">&times;</button>
+                <button id="modal-close-x" type="button" style="cursor: pointer;">&times;</button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label for="create-path">경로</label>
-                    <input type="text" id="create-path" placeholder="">
+                    <input type="text" id="create-path" style="width: 100%; padding: 8px;">
                 </div>
             </div>
             <div class="modal-footer">
-                <button id="create-confirm" class="modal-btn primary">생성</button>
-                <button class="modal-btn secondary modal-close">취소</button>
+                <button id="create-confirm" class="modal-btn primary" type="button" style="cursor: pointer; padding: 8px 16px;">생성</button>
             </div>
         </div>
     </div>
@@ -217,6 +214,9 @@
 
     <script src="assets/libs/marked.min.js"></script>
     <script src="assets/libs/crypto-js.min.js"></script>
+    <!-- EmailJS for sending emails -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    
     <script src="assets/js/utils.js"></script>
     <script src="assets/js/auth.js"></script>
     <script src="assets/js/github-api.js"></script>

@@ -5,6 +5,8 @@ class MorningPagesApp {
         this.currentUser = null;
         this.currentRepo = null;
         this.isInitialized = false;
+        this.createModalEventsBound = false; // 모달 이벤트 바인딩 플래그
+        this.mainScreenEventsBound = false; // 메인 화면 이벤트 바인딩 플래그
         
         this.bindEvents();
         this.init();
@@ -169,9 +171,10 @@ class MorningPagesApp {
         }
 
         if (sukipiNo) {
-            sukipiNo.addEventListener('click', async () => {
+            sukipiNo.addEventListener('click', () => {
                 sukipiModal.classList.add('hidden');
-                await this.handleUnauthorizedAccess();
+                // 수키피가 아니어도 로그인 진행
+                this.proceedWithLogin();
             });
         }
 
@@ -183,55 +186,8 @@ class MorningPagesApp {
             });
         }
 
-        // 파일/폴더 생성 버튼
-        const newFileBtn = document.getElementById('new-file-btn');
-        const newFolderBtn = document.getElementById('new-folder-btn');
-        const createModal = document.getElementById('create-modal');
-        const createConfirm = document.getElementById('create-confirm');
+        // 모달 관련 이벤트는 메인 화면에서 바인딩됨
 
-        if (newFileBtn) {
-            newFileBtn.addEventListener('click', () => {
-                this.showCreateModal('file');
-            });
-        }
-
-        if (newFolderBtn) {
-            newFolderBtn.addEventListener('click', () => {
-                this.showCreateModal('folder');
-            });
-        }
-
-        if (createConfirm) {
-            createConfirm.addEventListener('click', () => {
-                this.handleCreateFileOrFolder();
-            });
-        }
-
-        // 생성 모달 닫기
-        const createModalCloses = createModal?.querySelectorAll('.modal-close');
-        createModalCloses?.forEach(close => {
-            close.addEventListener('click', () => {
-                createModal.classList.add('hidden');
-                // 입력 필드 초기화
-                const pathInput = document.getElementById('create-path');
-                if (pathInput) {
-                    pathInput.value = '';
-                }
-            });
-        });
-
-        if (createModal) {
-            createModal.addEventListener('click', (e) => {
-                if (e.target === createModal) {
-                    createModal.classList.add('hidden');
-                    // 입력 필드 초기화
-                    const pathInput = document.getElementById('create-path');
-                    if (pathInput) {
-                        pathInput.value = '';
-                    }
-                }
-            });
-        }
 
         // 편집 모달 이벤트
         const editModal = document.getElementById('edit-modal');
@@ -343,34 +299,7 @@ class MorningPagesApp {
         }
     }
 
-    // 수키피 아닙니다 - 이메일 발송
-    async handleUnauthorizedAccess() {
-        try {
-            // 사용자 IP 가져오기
-            const userIP = await this.getUserIP();
-            
-            // 이메일 데이터 준비
-            const emailData = {
-                to: 'sotogitoarchive@gmail.com',
-                subject: '모닝페이지 무단 접근 시도',
-                body: `수키피가 아닌 사람이 모닝페이지에 접근을 시도했습니다.\n\n시간: ${new Date().toLocaleString('ko-KR')}\nIP: ${userIP}\n\n입력된 정보:\nRepository: ${this.tempLoginData?.repoUrl || 'N/A'}`
-            };
-
-            // 실제 이메일 발송 (EmailJS 등 사용 시 여기에 구현)
-            console.log('이메일 알림 발송:', emailData);
-            
-            // 로그인도 진행 (이메일은 발송하지만 로그인은 허용)
-            await this.proceedWithLogin();
-            
-            showSuccess('로그인되었습니다. 관리자에게 알림이 전송되었습니다.');
-            
-        } catch (error) {
-            console.error('Failed to send notification:', error);
-            // 이메일 발송 실패해도 로그인은 진행
-            await this.proceedWithLogin();
-            showSuccess('로그인되었습니다.');
-        }
-    }
+    
 
     // 사용자 IP 가져오기
     async getUserIP() {
@@ -705,89 +634,109 @@ class MorningPagesApp {
 
     // 파일/폴더 생성 모달 표시
     showCreateModal(type) {
+        console.log('showCreateModal 호출됨, type:', type);
+        
         const modal = document.getElementById('create-modal');
         const title = document.getElementById('create-modal-title');
         const pathInput = document.getElementById('create-path');
         
-        if (!modal || !title || !pathInput) return;
+        console.log('Modal elements:', { modal: !!modal, title: !!title, pathInput: !!pathInput });
         
-        if (type === 'file') {
-            title.textContent = '새 파일 생성';
-        } else {
-            title.textContent = '새 폴더 생성';
+        if (!modal || !title || !pathInput) {
+            console.error('모달 요소를 찾을 수 없습니다:', { modal: !!modal, title: !!title, pathInput: !!pathInput });
+            showError('모달을 표시할 수 없습니다.');
+            return;
         }
         
-        pathInput.placeholder = '';
+        // 현재 모달 타입 저장
+        this.currentModalType = type;
+        
+        // 모달 타입에 따른 설정
+        if (type === 'file') {
+            title.textContent = '새 파일 생성';
+            pathInput.placeholder = '파일명.md';
+        } else {
+            title.textContent = '새 폴더 생성';
+            pathInput.placeholder = '폴더명';
+        }
+        
+        // 입력 필드 초기화
         pathInput.value = '';
         
+        console.log('모달 표시 전 hidden 클래스:', modal.classList.contains('hidden'));
         modal.classList.remove('hidden');
-        pathInput.focus();
+        console.log('모달 표시 후 hidden 클래스:', modal.classList.contains('hidden'));
+        
+        // 포커스 설정
+        setTimeout(() => {
+            pathInput.focus();
+        }, 100);
     }
 
     // 파일/폴더 생성 처리
     async handleCreateFileOrFolder() {
+        console.log('handleCreateFileOrFolder 호출됨');
+        
         const pathInput = document.getElementById('create-path');
         const modal = document.getElementById('create-modal');
         
+        console.log('Elements:', { pathInput: !!pathInput, modal: !!modal });
+        
         if (!pathInput) {
+            console.error('입력 필드를 찾을 수 없습니다');
             showError('입력 필드를 찾을 수 없습니다.');
             return;
         }
         
         let path = pathInput.value.trim();
+        console.log('입력된 경로:', path);
+        
+        // 빈 입력일 때 기본값
+        if (!path) {
+            path = formatDate(new Date());
+            console.log('기본값 사용:', path);
+        }
         
         try {
-            // 파일 생성 로직
-            let fileName, title;
-            const today = formatDate(new Date());
+            let fileName = path;
             
-            if (path.includes('/')) {
-                // 슬래시가 있는 경우
-                if (path.endsWith('/')) {
-                    // "2025/09/" -> "2025/09/2025-01-27.md"
-                    fileName = `${path}${today}.md`;
-                    title = `${path}${today}`;
-                } else {
-                    // "2025/09/new" -> "2025/09/2025-01-27 new.md"
-                    const parts = path.split('/');
-                    const lastPart = parts.pop();
-                    const folderPath = parts.join('/');
-                    
-                    fileName = `${folderPath}/${today} ${lastPart}.md`;
-                    title = `${folderPath}/${today} ${lastPart}`;
+            // 파일 타입에 따른 처리
+            if (this.currentModalType === 'file') {
+                // .md 확장자 추가
+                if (!fileName.endsWith('.md')) {
+                    fileName += '.md';
                 }
-            } else {
-                // 슬래시가 없는 경우
-                if (path.endsWith('.md')) {
-                    // "test.md" -> "test.md" (그대로)
-                    fileName = path;
-                    title = path.replace('.md', '');
-                } else if (path === '') {
-                    // 빈 입력 -> "2025-01-27.md"
-                    fileName = `${today}.md`;
-                    title = today;
-                } else {
-                    // "new" -> "2025-01-27 new.md"
-                    fileName = `${today} ${path}.md`;
-                    title = `${today} ${path}`;
-                }
-            }
                 
-            // 파일 생성
-            if (window.editorManager) {
-                window.editorManager.loadFile(fileName, '');
-                // 제목 필드에 올바른 제목 설정
+                // 에디터에 새 파일 로드
+                const editor = document.getElementById('editor');
                 const titleInput = document.getElementById('file-title');
-                if (titleInput) {
-                    titleInput.value = title;
+                
+                if (editor) {
+                    editor.value = '';
+                    editor.focus();
                 }
+                
+                if (titleInput) {
+                    titleInput.value = fileName.replace('.md', '');
+                }
+                
+                console.log('새 파일 준비됨:', fileName);
+                showSuccess('새 파일이 준비되었습니다.');
+            } else {
+                // 폴더 생성 (현재는 지원하지 않음)
+                console.log('폴더 생성 요청:', fileName);
+                showError('폴더 생성은 현재 지원하지 않습니다.');
             }
-            showSuccess('새 파일이 생성되었습니다.');
             
-            modal.classList.add('hidden');
+            // 모달 닫기
+            if (modal) {
+                modal.classList.add('hidden');
+                pathInput.value = '';
+                console.log('모달 닫힘');
+            }
             
         } catch (error) {
-            console.error('Failed to create file/folder:', error);
+            console.error('생성 중 오류:', error);
             showError('생성에 실패했습니다.');
         }
     }
@@ -800,10 +749,188 @@ class MorningPagesApp {
         if (loginScreen) loginScreen.classList.add('hidden');
         if (mainScreen) mainScreen.classList.remove('hidden');
         
+        // 메인 화면 이벤트 바인딩
+        this.bindMainScreenEvents();
+        
         // 초기 UI 업데이트
         this.updateWritingTime();
         this.updateCharCount();
         this.updatePreview();
+    }
+    
+    // 메인 화면 이벤트 바인딩
+    bindMainScreenEvents() {
+        // 이미 바인딩되었으면 중복 방지
+        if (this.mainScreenEventsBound) {
+            return;
+        }
+        
+        // 파일/폴더 생성 버튼은 이제 전역 리스너에서 처리됨
+        
+        // 생성 모달 이벤트 바인딩 (한 번만)
+        if (!this.createModalEventsBound) {
+            this.bindCreateModalEvents();
+            this.createModalEventsBound = true;
+        }
+        
+        // 바인딩 완료 플래그 설정
+        this.mainScreenEventsBound = true;
+    }
+    
+    // 생성 모달 이벤트 바인딩 (완전히 새로 작성 - 절대 실패하지 않는 방식)
+    bindCreateModalEvents() {
+        console.log('bindCreateModalEvents 호출됨 - 절대 실패하지 않는 방식');
+
+        // 모달 표시 함수
+        const showModal = (type) => {
+            const modal = document.getElementById('create-modal');
+            const title = document.getElementById('create-modal-title');
+            const pathInput = document.getElementById('create-path');
+            
+            if (!modal || !title || !pathInput) {
+                console.error('모달 요소를 찾을 수 없습니다');
+                return;
+            }
+
+            // 현재 모달 타입 저장
+            this.currentModalType = type;
+            
+            // 파일 생성만 지원
+            title.textContent = '새 파일 생성';
+            
+            // 입력 필드 초기화
+            pathInput.value = '';
+            modal.classList.remove('hidden');
+            
+            // 포커스 설정
+            setTimeout(() => {
+                pathInput.focus();
+            }, 100);
+        };
+
+        // 모달 숨기기 함수
+        const hideModal = () => {
+            const modal = document.getElementById('create-modal');
+            const pathInput = document.getElementById('create-path');
+            if (modal) modal.classList.add('hidden');
+            if (pathInput) pathInput.value = '';
+        };
+
+        // 파일 생성 처리 함수 (기존 비즈니스 로직 복원)
+        const handleCreate = () => {
+            const pathInput = document.getElementById('create-path');
+            if (!pathInput) return;
+            
+            let path = pathInput.value.trim();
+            const today = formatDate(new Date());
+            
+            try {
+                let fileName = path;
+                
+                // 기존 비즈니스 로직: /뒤에 아무것도 없으면 오늘 날짜를 기준으로 생성
+                if (!path) {
+                    // 빈 입력일 때 기본값
+                    fileName = `${today}.md`;
+                } else if (path.endsWith('/')) {
+                    // /뒤에 아무것도 없으면 오늘 날짜 추가
+                    fileName = `${path}${today}.md`;
+                } else if (path.includes('/')) {
+                    // /뒤에 내용이 있으면 날짜 + 뒤에 내용
+                    const parts = path.split('/');
+                    const lastPart = parts.pop();
+                    const folderPath = parts.join('/');
+                    fileName = `${folderPath}/${today} ${lastPart}.md`;
+                } else {
+                    // 단순 파일명인 경우
+                    if (!fileName.endsWith('.md')) {
+                        fileName += '.md';
+                    }
+                }
+                
+                // 에디터에 새 파일 로드
+                const editor = document.getElementById('editor');
+                const titleInput = document.getElementById('file-title');
+                
+                if (editor) {
+                    editor.value = '';
+                    editor.focus();
+                }
+                
+                if (titleInput) {
+                    titleInput.value = fileName.replace('.md', '');
+                }
+                
+                showSuccess('새 파일이 준비되었습니다.');
+                
+            } catch (error) {
+                console.error('생성 중 오류:', error);
+                showError('생성에 실패했습니다.');
+            }
+        };
+
+        // 이벤트 바인딩 - 전역으로 직접 등록
+        document.addEventListener('click', (e) => {
+            // 새 파일 버튼
+            if (e.target && e.target.id === 'new-file-btn') {
+                e.preventDefault();
+                console.log('새파일 버튼 클릭됨 - 전역 리스너');
+                showModal('file');
+                return;
+            }
+            
+            
+            // 생성 버튼
+            if (e.target && e.target.id === 'create-confirm') {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('생성 버튼 클릭됨 - 전역 리스너');
+                handleCreate();
+                // 직접 모달 닫기
+                const modal = document.getElementById('create-modal');
+                const pathInput = document.getElementById('create-path');
+                if (modal) modal.classList.add('hidden');
+                if (pathInput) pathInput.value = '';
+                return;
+            }
+            
+            // 닫기 버튼 (X 버튼만)
+            if (e.target && e.target.id === 'modal-close-x') {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('닫기 버튼 클릭됨 - 전역 리스너');
+                // 직접 모달 닫기
+                const modal = document.getElementById('create-modal');
+                const pathInput = document.getElementById('create-path');
+                if (modal) modal.classList.add('hidden');
+                if (pathInput) pathInput.value = '';
+                return;
+            }
+            
+            // 배경 클릭
+            if (e.target && e.target.id === 'create-modal') {
+                console.log('배경 클릭됨 - 전역 리스너');
+                // 직접 모달 닫기
+                const modal = document.getElementById('create-modal');
+                const pathInput = document.getElementById('create-path');
+                if (modal) modal.classList.add('hidden');
+                if (pathInput) pathInput.value = '';
+                return;
+            }
+        });
+
+        // Enter 키 처리
+        document.addEventListener('keydown', (e) => {
+            const modal = document.getElementById('create-modal');
+            const pathInput = document.getElementById('create-path');
+            
+            if (modal && !modal.classList.contains('hidden') && e.key === 'Enter' && pathInput === document.activeElement) {
+                e.preventDefault();
+                console.log('Enter 키 눌림 - 전역 리스너');
+                handleCreate();
+            }
+        });
+
+        console.log('모달 이벤트 바인딩 완료 - 전역 리스너 방식');
     }
 }
 

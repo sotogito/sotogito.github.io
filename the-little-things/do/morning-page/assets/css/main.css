@@ -621,7 +621,8 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1000;
+    z-index: 2000;
+    pointer-events: auto;
 }
 
 .modal-content {
@@ -631,6 +632,7 @@ body {
     width: 90%;
     max-height: 80vh;
     overflow-y: auto;
+    pointer-events: auto;
 }
 
 .modal-header {
@@ -781,18 +783,20 @@ body {
     
     .sidebar {
         width: 100%;
-        height: 200px;
+        height: 150px;
         border-right: none;
         border-bottom: 1px solid #e1e1e1;
     }
     
     .editor-section {
         border-right: none;
+        flex: 1;
+        min-height: 400px;
     }
     
     .preview-section {
         width: 100%;
-        height: 300px;
+        height: 250px;
         border-top: 1px solid #e1e1e1;
     }
     

@@ -66,7 +66,8 @@ function showError(message) {
         padding: 12px 16px;
         border-radius: 4px;
         font-size: 14px;
-        z-index: 1001;
+        z-index: 1500;
+        pointer-events: none;
         animation: slideIn 0.3s ease;
     `;
     
@@ -96,7 +97,8 @@ function showSuccess(message) {
         padding: 12px 16px;
         border-radius: 4px;
         font-size: 14px;
-        z-index: 1001;
+        z-index: 1500;
+        pointer-events: none;
         animation: slideIn 0.3s ease;
     `;
     
