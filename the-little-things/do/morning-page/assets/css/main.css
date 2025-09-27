@@ -595,15 +595,15 @@ body {
 }
 
 .heatmap-day.morning {
-    background-color: #4caf50; /* 10시 이전 - 초록 */
+    background-color: #4caf50; /* 10시까지 - 초록 */
 }
 
 .heatmap-day.afternoon {
-    background-color: #ffc107; /* 10시-14시 - 노랑 */
+    background-color: #ffc107; /* 14시까지 - 노랑 */
 }
 
 .heatmap-day.evening {
-    background-color: #ff9800; /* 14시 이후 - 주황 */
+    background-color: #ff9800; /* 23:59까지 - 주황 */
 }
 
 .heatmap-day:hover {

@@ -19,9 +19,9 @@ function getCurrentTime() {
 
 // 시간대별 색상 클래스 반환
 function getTimeColorClass(hour) {
-    if (hour < 10) return 'morning';      // 10시 이전 - 초록
-    if (hour < 14) return 'afternoon';    // 14시 이전 - 노랑
-    return 'evening';                     // 14시 이후 - 주황
+    if (hour <= 10) return 'morning';     // 10시까지 - 초록
+    if (hour <= 14) return 'afternoon';   // 14시까지 - 오렌지
+    return 'evening';                     // 23:59까지 - 빨강
 }
 
 // 글자수 카운트 (공백 제외)

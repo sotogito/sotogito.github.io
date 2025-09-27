@@ -74,6 +74,25 @@ class GitHubAPI {
         }
     }
 
+    // 특정 파일의 커밋 정보 가져오기 (작성 시간 확인용)
+    async getFileCommitInfo(fileName) {
+        try {
+            const endpoint = `/repos/${this.owner}/${this.repo}/commits?path=${fileName}&per_page=1`;
+            const commits = await this.apiRequest(endpoint);
+            
+            if (commits && commits.length > 0) {
+                return {
+                    date: commits[0].commit.author.date,
+                    message: commits[0].commit.message
+                };
+            }
+            return null;
+        } catch (error) {
+            console.error('Failed to get file commit info:', error);
+            return null;
+        }
+    }
+
     // 파일 저장 (생성 또는 업데이트)
     async saveFile(fileName, content, message = null) {
         try {
@@ -166,6 +185,7 @@ class GitHubAPI {
             // 모닝페이지 커밋만 필터링
             const morningPageCommits = commits.filter(commit => 
                 commit.commit.message.includes('Morning page') ||
+                commit.commit.message.includes('from sukipi.me') ||
                 commit.commit.message.match(/\d{4}-\d{2}-\d{2}\.md/)
             );
 

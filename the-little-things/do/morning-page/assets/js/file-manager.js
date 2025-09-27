@@ -216,13 +216,16 @@ class FileManager {
                 fileItem.classList.add('loading');
             }
 
-            // 파일 내용 가져오기 (전체 경로 사용)
-            const content = await window.githubAPI.getFile(filePath);
+            // 파일 내용과 커밋 정보 가져오기
+            const [content, commitInfo] = await Promise.all([
+                window.githubAPI.getFile(filePath),
+                window.githubAPI.getFileCommitInfo(filePath)
+            ]);
             
             if (content !== null) {
-                // 에디터에 로드
+                // 에디터에 로드 (커밋 정보 포함)
                 if (window.editorManager) {
-                    window.editorManager.loadFile(filePath, content);
+                    window.editorManager.loadFile(filePath, content, commitInfo);
                 }
                 
                 // 현재 파일 업데이트

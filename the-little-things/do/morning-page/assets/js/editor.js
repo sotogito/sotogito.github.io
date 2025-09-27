@@ -204,7 +204,7 @@ class EditorManager {
     }
 
     // 파일 로드
-    loadFile(fileName, content) {
+    loadFile(fileName, content, commitInfo = null) {
         this.currentFile = fileName;
         this.editor.value = content || '';
         this.editor.disabled = false;
@@ -215,6 +215,13 @@ class EditorManager {
             const displayName = this.getDisplayNameFromPath(fileName);
             this.titleInput.value = displayName;
             this.titleInput.disabled = false;
+        }
+        
+        // 작성 시간 업데이트 (커밋 정보가 있으면 실제 시간 표시)
+        if (window.app && commitInfo && commitInfo.date) {
+            window.app.updateWritingTime(commitInfo.date);
+        } else if (window.app) {
+            window.app.updateWritingTime();
         }
         
         // UI 업데이트

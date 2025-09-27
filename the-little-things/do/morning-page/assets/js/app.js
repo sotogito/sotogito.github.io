@@ -436,6 +436,14 @@ class MorningPagesApp {
         if (currentFileSpan) {
             currentFileSpan.textContent = fileName;
         }
+        
+        // 파일명에서 날짜 추출해서 작성 시간 표시
+        const dateMatch = fileName.match(/(\d{4}-\d{2}-\d{2})/);
+        if (dateMatch) {
+            this.updateWritingTime(dateMatch[1]);
+        } else {
+            this.updateWritingTime();
+        }
     }
 
     // 새 파일 준비
@@ -512,10 +520,21 @@ class MorningPagesApp {
     }
 
     // 작성 시간 업데이트
-    updateWritingTime() {
+    updateWritingTime(fileDate = null) {
         const writingTime = document.getElementById('writing-time');
         if (writingTime) {
-            writingTime.textContent = `작성 시간: ${getCurrentTime()}`;
+            if (fileDate) {
+                // 파일의 실제 작성 날짜 표시
+                const date = new Date(fileDate);
+                const timeStr = date.toLocaleTimeString('ko-KR', { 
+                    hour: '2-digit', 
+                    minute: '2-digit' 
+                });
+                writingTime.textContent = `작성 시간: ${timeStr}`;
+            } else {
+                // 새로 작성 중일 때는 현재 시간
+                writingTime.textContent = `작성 시간: ${getCurrentTime()}`;
+            }
         }
     }
 
@@ -853,12 +872,32 @@ class MorningPagesApp {
                 
                 if (editor) {
                     editor.value = '';
+                    editor.disabled = false;
+                    editor.style.backgroundColor = '#fff';
+                    editor.style.color = '#333';
                     editor.focus();
                 }
                 
                 if (titleInput) {
                     titleInput.value = fileName.replace('.md', '');
+                    titleInput.disabled = false;
+                    titleInput.style.backgroundColor = 'transparent';
+                    titleInput.style.color = '#333';
                 }
+                
+                // 저장 버튼 활성화
+                const saveBtn = document.getElementById('save-btn');
+                if (saveBtn) {
+                    saveBtn.disabled = false;
+                    saveBtn.textContent = '저장하기';
+                    saveBtn.style.backgroundColor = '#000';
+                }
+                
+                // 작성 시간을 현재 시간으로 설정
+                this.updateWritingTime();
+                
+                // 글자수 업데이트
+                this.updateCharCount();
                 
                 showSuccess('새 파일이 준비되었습니다.');
                 
