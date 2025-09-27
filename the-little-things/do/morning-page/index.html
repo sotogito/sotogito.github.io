@@ -48,7 +48,8 @@
                     
                     <button type="submit" class="login-btn">로그인</button>
                     
-                    <div class="help-link">
+                    <div class="login-actions">
+                        <button type="button" id="clear-cache-btn" class="clear-cache-btn">캐시 삭제</button>
                         <a href="#" id="token-guide">Personal Access Token 생성 가이드</a>
                     </div>
                 </form>
@@ -71,6 +72,10 @@
                 <aside class="sidebar">
                     <div class="sidebar-header">
                         <h3>파일</h3>
+                        <div class="sidebar-actions">
+                            <button id="new-folder-btn" class="sidebar-btn" title="새 폴더">📁</button>
+                            <button id="new-file-btn" class="sidebar-btn" title="새 파일">📄</button>
+                        </div>
                     </div>
                     <div id="file-tree" class="file-tree">
                         <!-- 파일 트리가 여기에 동적으로 생성됩니다 -->
@@ -80,7 +85,7 @@
                 <section class="editor-section">
                     <div class="editor-header">
                         <div class="editor-title">
-                            <span id="current-file">새 글 작성</span>
+                            <input type="text" id="file-title" class="file-title-input" placeholder="파일 제목을 입력하세요" />
                         </div>
                         <div class="editor-stats">
                             <span id="char-count">0</span> / 1000자
@@ -132,6 +137,20 @@
         </div>
     </div>
 
+    <!-- 수키피 확인 모달 -->
+    <div id="sukipi-modal" class="modal hidden">
+        <div class="modal-content sukipi-modal">
+            <div class="modal-body">
+                <h3>🤔 잠깐!</h3>
+                <p>수키피가 맞습니까?</p>
+                <div class="modal-actions">
+                    <button id="sukipi-yes" class="modal-btn primary">맞습니다</button>
+                    <button id="sukipi-no" class="modal-btn secondary">아닙니다</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- 토큰 가이드 모달 -->
     <div id="token-modal" class="modal hidden">
         <div class="modal-content">
@@ -150,6 +169,48 @@
                     <li>Generate token → 생성된 토큰을 복사하여 입력</li>
                 </ol>
                 <p class="modal-note">⚠️ 토큰은 한 번만 표시되므로 반드시 복사해두세요.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 파일/폴더 생성 모달 -->
+    <div id="create-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="create-modal-title">새 파일 생성</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="create-path">경로</label>
+                    <input type="text" id="create-path" placeholder="">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="create-confirm" class="modal-btn primary">생성</button>
+                <button class="modal-btn secondary modal-close">취소</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 파일 편집 모달 -->
+    <div id="edit-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>파일 편집</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="edit-path">새 경로</label>
+                    <input type="text" id="edit-path" placeholder="folder/subfolder/filename.md">
+                    <small>파일 이름이나 위치를 변경할 수 있습니다</small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="edit-confirm" class="modal-btn primary">변경</button>
+                <button class="modal-btn danger" id="delete-file">삭제</button>
+                <button class="modal-btn secondary modal-close">취소</button>
             </div>
         </div>
     </div>

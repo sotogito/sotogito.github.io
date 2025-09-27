@@ -15,11 +15,31 @@ class EditorManager {
     init() {
         this.editor = document.getElementById('editor');
         this.preview = document.getElementById('preview');
+        this.titleInput = document.getElementById('file-title');
         
         if (this.editor) {
             this.bindEditorEvents();
             this.setupAutoPreview();
         }
+
+        if (this.titleInput) {
+            this.bindTitleEvents();
+        }
+    }
+
+    // 제목 입력 필드 이벤트 바인딩
+    bindTitleEvents() {
+        this.titleInput.addEventListener('input', () => {
+            this.isDirty = true;
+        });
+
+        this.titleInput.addEventListener('keydown', (e) => {
+            // Backspace와 Delete는 제목에서는 허용
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                this.editor.focus();
+            }
+        });
     }
 
     // 에디터 이벤트 바인딩
@@ -49,7 +69,7 @@ class EditorManager {
         }, 100));
     }
 
-    // 입력 처리
+    // 입력 처리 (임시 저장 기능 제거)
     handleInput() {
         this.isDirty = true;
         this.updatePreview();
@@ -63,6 +83,13 @@ class EditorManager {
 
     // 키보드 단축키 처리
     handleKeydown(e) {
+        // Backspace와 Delete 키 금지 (작성 중인 글 삭제 방지)
+        if (e.key === 'Backspace' || e.key === 'Delete') {
+            e.preventDefault();
+            showError('작성 중인 내용은 삭제할 수 없습니다.');
+            return;
+        }
+
         // Ctrl+S (저장)
         if (e.ctrlKey && e.key === 's') {
             e.preventDefault();
@@ -183,20 +210,28 @@ class EditorManager {
         this.editor.disabled = false;
         this.isDirty = false;
         
+        // 제목 필드 업데이트
+        if (this.titleInput) {
+            const displayName = this.getDisplayNameFromPath(fileName);
+            this.titleInput.value = displayName;
+            this.titleInput.disabled = false;
+        }
+        
         // UI 업데이트
         this.updatePreview();
         this.updateStats();
-        
-        const currentFileSpan = document.getElementById('current-file');
-        if (currentFileSpan) {
-            currentFileSpan.textContent = fileName;
-        }
         
         // 에디터 포커스
         setTimeout(() => {
             this.editor.focus();
             this.editor.setSelectionRange(this.editor.value.length, this.editor.value.length);
         }, 100);
+    }
+
+    // 파일 경로에서 표시 이름 추출
+    getDisplayNameFromPath(filePath) {
+        // .md 확장자만 제거하고 전체 경로 반환
+        return filePath.replace('.md', '');
     }
 
     // 새 파일 생성
@@ -207,19 +242,25 @@ class EditorManager {
         this.loadFile(fileName || defaultFileName, '');
     }
 
-    // 에디터 비활성화 (저장 후)
+    // 에디터 비활성화 (과거 파일 읽기 전용)
     disableEditor() {
         if (this.editor) {
             this.editor.disabled = true;
             this.editor.style.backgroundColor = '#f5f5f5';
             this.editor.style.color = '#666';
         }
+
+        if (this.titleInput) {
+            this.titleInput.disabled = true;
+            this.titleInput.style.backgroundColor = '#f5f5f5';
+            this.titleInput.style.color = '#666';
+        }
         
         const saveBtn = document.getElementById('save-btn');
         if (saveBtn) {
             saveBtn.disabled = true;
-            saveBtn.textContent = '저장 완료';
-            saveBtn.style.backgroundColor = '#4caf50';
+            saveBtn.textContent = '읽기 전용';
+            saveBtn.style.backgroundColor = '#ccc';
         }
     }
 
@@ -230,8 +271,29 @@ class EditorManager {
             this.editor.style.backgroundColor = '#fff';
             this.editor.style.color = '#333';
         }
+
+        if (this.titleInput) {
+            this.titleInput.disabled = false;
+            this.titleInput.style.backgroundColor = 'transparent';
+            this.titleInput.style.color = '#333';
+        }
+        
+        const saveBtn = document.getElementById('save-btn');
+        if (saveBtn) {
+            saveBtn.textContent = '저장하기';
+            saveBtn.style.backgroundColor = '#000';
+        }
         
         this.updateStats();
+    }
+
+    // 현재 파일명 가져오기 (제목 입력 필드 기준)
+    getCurrentFileName() {
+        if (this.titleInput && this.titleInput.value.trim()) {
+            const title = this.titleInput.value.trim();
+            return title.endsWith('.md') ? title : `${title}.md`;
+        }
+        return this.currentFile || `${formatDate(new Date())}.md`;
     }
 
     // 현재 내용 가져오기

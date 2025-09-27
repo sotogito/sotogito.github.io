@@ -77,8 +77,9 @@ class GitHubAPI {
     // 파일 저장 (생성 또는 업데이트)
     async saveFile(fileName, content, message = null) {
         try {
-            // 커밋 메시지 생성
-            const commitMessage = message || `Morning page ${formatDate(new Date())}`;
+            // 커밋 메시지 생성 - "from sukipi.me 날짜" 형식
+            const today = formatDate(new Date());
+            const commitMessage = message || `from sukipi.me ${today}`;
             
             // 기존 파일이 있는지 확인 (SHA 값 필요)
             let sha = null;
@@ -86,14 +87,7 @@ class GitHubAPI {
                 const existingFile = await this.apiRequest(`/repos/${this.owner}/${this.repo}/contents/${fileName}`);
                 sha = existingFile.sha;
                 
-                // 이미 오늘 저장된 파일이 있다면 저장 거부
-                const today = formatDate(new Date());
-                if (fileName.startsWith(today)) {
-                    return {
-                        success: false,
-                        error: '오늘은 이미 저장했습니다. 하루에 한 번만 저장할 수 있습니다.'
-                    };
-                }
+                // 파일 수정 허용 - 하루 한 번 제한 제거
             } catch (error) {
                 // 파일이 없으면 새로 생성
             }
