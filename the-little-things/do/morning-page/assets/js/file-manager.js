@@ -159,11 +159,12 @@ class FileManager {
                 // 파일 렌더링
                 const date = this.extractDateFromFileName(key);
                 const displayName = date ? this.formatDisplayName(key, date) : key.replace('.md', '');
+                const fileDateText = date ? this.formatFileDate(date) : '';
                 
                 html += `
                     <div class="file-item file ${nestingClass}" data-file="${item.data.fullPath}">
                         <span class="file-name">${displayName}</span>
-                        <span class="file-date">${this.formatFileDate(date)}</span>
+                        <span class="file-date">${fileDateText}</span>
                     </div>
                 `;
             }
@@ -289,19 +290,17 @@ class FileManager {
     formatFileDate(date) {
         if (!date) return '';
         
-        const dateObj = new Date(date);
+        const dateObj = new Date(date + 'T00:00:00');
         const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        
         const diffTime = today - dateObj;
         const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
         
         if (diffDays === 0) {
             return '오늘';
-        } else if (diffDays === 1) {
-            return '어제';
-        } else if (diffDays < 7) {
-            return `${diffDays}일 전`;
         } else {
-            return date;
+            return '';
         }
     }
 
