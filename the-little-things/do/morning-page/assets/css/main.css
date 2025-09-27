@@ -1,0 +1,618 @@
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #333;
+    background-color: #fafafa;
+    overflow-x: hidden;
+}
+
+/* Utility Classes */
+.hidden {
+    display: none !important;
+}
+
+.screen {
+    min-height: 100vh;
+}
+
+/* Login Screen */
+#login-screen {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff;
+}
+
+.login-container {
+    width: 100%;
+    max-width: 400px;
+    padding: 60px 40px;
+    text-align: center;
+}
+
+.app-title {
+    font-size: 28px;
+    font-weight: 300;
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+    color: #000;
+}
+
+.app-subtitle {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 48px;
+    font-weight: 400;
+}
+
+.login-form {
+    text-align: left;
+}
+
+.form-group {
+    margin-bottom: 24px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="password"] {
+    width: 100%;
+    height: 44px;
+    padding: 0 16px;
+    border: 1px solid #e1e1e1;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: #fff;
+    transition: border-color 0.2s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #333;
+}
+
+.checkbox-group {
+    margin-bottom: 32px;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    font-size: 13px;
+    color: #666;
+    cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+    margin-right: 8px;
+    width: 16px;
+    height: 16px;
+}
+
+.login-btn {
+    width: 100%;
+    height: 48px;
+    background-color: #000;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    margin-bottom: 24px;
+}
+
+.login-btn:hover {
+    background-color: #333;
+}
+
+.login-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.help-link {
+    text-align: center;
+}
+
+.help-link a {
+    font-size: 13px;
+    color: #666;
+    text-decoration: none;
+    border-bottom: 1px solid #e1e1e1;
+    transition: color 0.2s ease;
+}
+
+.help-link a:hover {
+    color: #333;
+}
+
+/* Main Application */
+#main-screen {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px;
+    background-color: #fff;
+    border-bottom: 1px solid #e1e1e1;
+}
+
+.app-logo {
+    font-size: 18px;
+    font-weight: 300;
+    letter-spacing: -0.3px;
+    color: #000;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.user-info {
+    font-size: 13px;
+    color: #666;
+}
+
+.logout-btn {
+    padding: 6px 12px;
+    background-color: transparent;
+    border: 1px solid #e1e1e1;
+    border-radius: 4px;
+    font-size: 13px;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.logout-btn:hover {
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+/* Main Layout */
+.app-main {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 280px;
+    background-color: #fff;
+    border-right: 1px solid #e1e1e1;
+    overflow-y: auto;
+}
+
+.sidebar-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid #e1e1e1;
+}
+
+.sidebar-header h3 {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+}
+
+.file-tree {
+    padding: 12px 0;
+}
+
+.file-item {
+    padding: 8px 20px;
+    cursor: pointer;
+    font-size: 13px;
+    color: #666;
+    transition: background-color 0.2s ease;
+}
+
+.file-item:hover {
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+.file-item.active {
+    background-color: #000;
+    color: #fff;
+}
+
+.file-date {
+    font-size: 12px;
+    color: #999;
+    margin-left: 8px;
+}
+
+/* Editor Section */
+.editor-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    border-right: 1px solid #e1e1e1;
+}
+
+.editor-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid #e1e1e1;
+}
+
+.editor-title span {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+}
+
+.editor-stats {
+    font-size: 13px;
+    color: #666;
+}
+
+.editor-stats.warning {
+    color: #ff6b35;
+}
+
+.editor-stats.success {
+    color: #4caf50;
+}
+
+.editor-container {
+    flex: 1;
+    padding: 0;
+}
+
+.editor-textarea {
+    width: 100%;
+    height: 100%;
+    padding: 24px;
+    border: none;
+    outline: none;
+    resize: none;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    color: #333;
+    background-color: #fff;
+}
+
+.editor-textarea::placeholder {
+    color: #999;
+    line-height: 1.7;
+}
+
+.editor-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    border-top: 1px solid #e1e1e1;
+    background-color: #fafafa;
+}
+
+.save-btn {
+    padding: 8px 20px;
+    background-color: #000;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.save-btn:hover:not(:disabled) {
+    background-color: #333;
+}
+
+.save-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.writing-time {
+    font-size: 12px;
+    color: #999;
+}
+
+/* Preview Section */
+.preview-section {
+    width: 360px;
+    background-color: #fff;
+    overflow-y: auto;
+}
+
+.preview-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid #e1e1e1;
+}
+
+.preview-header h3 {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+}
+
+.preview-content {
+    padding: 24px;
+    font-size: 14px;
+    line-height: 1.7;
+    color: #333;
+}
+
+.preview-content h1,
+.preview-content h2,
+.preview-content h3,
+.preview-content h4,
+.preview-content h5,
+.preview-content h6 {
+    margin: 24px 0 16px 0;
+    font-weight: 600;
+    color: #000;
+}
+
+.preview-content h1 { font-size: 24px; }
+.preview-content h2 { font-size: 20px; }
+.preview-content h3 { font-size: 18px; }
+
+.preview-content p {
+    margin-bottom: 16px;
+}
+
+.preview-content ul,
+.preview-content ol {
+    margin: 16px 0;
+    padding-left: 24px;
+}
+
+.preview-content li {
+    margin-bottom: 4px;
+}
+
+.preview-content blockquote {
+    border-left: 3px solid #e1e1e1;
+    padding-left: 16px;
+    margin: 16px 0;
+    color: #666;
+    font-style: italic;
+}
+
+.preview-content code {
+    background-color: #f5f5f5;
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-family: 'Monaco', 'Menlo', monospace;
+    font-size: 13px;
+}
+
+.preview-content pre {
+    background-color: #f5f5f5;
+    padding: 16px;
+    border-radius: 4px;
+    overflow-x: auto;
+    margin: 16px 0;
+}
+
+/* Heatmap Section */
+.heatmap-section {
+    background-color: #fff;
+    border-top: 1px solid #e1e1e1;
+    padding: 20px 24px;
+}
+
+.heatmap-header {
+    margin-bottom: 16px;
+}
+
+.heatmap-header h3 {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+}
+
+.heatmap-container {
+    overflow-x: auto;
+}
+
+.heatmap {
+    display: flex;
+    gap: 3px;
+    min-width: 800px;
+}
+
+.heatmap-month {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.heatmap-day {
+    width: 11px;
+    height: 11px;
+    border-radius: 2px;
+    background-color: #ebedf0;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.heatmap-day.morning {
+    background-color: #4caf50; /* 10시 이전 - 초록 */
+}
+
+.heatmap-day.afternoon {
+    background-color: #ffc107; /* 10시-14시 - 노랑 */
+}
+
+.heatmap-day.evening {
+    background-color: #ff9800; /* 14시 이후 - 주황 */
+}
+
+.heatmap-day:hover {
+    transform: scale(1.2);
+}
+
+/* Modal */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: #fff;
+    border-radius: 8px;
+    max-width: 500px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-bottom: 1px solid #e1e1e1;
+}
+
+.modal-header h3 {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #666;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-body {
+    padding: 24px;
+}
+
+.modal-body ol {
+    margin: 16px 0;
+    padding-left: 20px;
+}
+
+.modal-body li {
+    margin-bottom: 8px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.modal-note {
+    margin-top: 16px;
+    padding: 12px;
+    background-color: #fff3cd;
+    border-radius: 4px;
+    font-size: 13px;
+    color: #856404;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .login-container {
+        padding: 40px 24px;
+        max-width: 100%;
+    }
+    
+    .app-header {
+        padding: 12px 16px;
+    }
+    
+    .app-main {
+        flex-direction: column;
+    }
+    
+    .sidebar {
+        width: 100%;
+        height: 200px;
+        border-right: none;
+        border-bottom: 1px solid #e1e1e1;
+    }
+    
+    .editor-section {
+        border-right: none;
+    }
+    
+    .preview-section {
+        width: 100%;
+        height: 300px;
+        border-top: 1px solid #e1e1e1;
+    }
+    
+    .heatmap-section {
+        padding: 16px;
+    }
+    
+    .modal-content {
+        margin: 20px;
+        width: calc(100% - 40px);
+    }
+}
+
+@media (max-width: 480px) {
+    .app-title {
+        font-size: 24px;
+    }
+    
+    .header-right {
+        gap: 8px;
+    }
+    
+    .user-info {
+        display: none;
+    }
+    
+    .editor-textarea {
+        padding: 16px;
+    }
+    
+    .preview-content {
+        padding: 16px;
+    }
+}

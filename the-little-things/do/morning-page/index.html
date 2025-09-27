@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Morning Pages</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 로그인되지 않은 상태 -->
+        <div id="login-screen" class="screen">
+            <div class="login-container">
+                <h1 class="app-title">Morning Pages</h1>
+                <p class="app-subtitle">매일 1000자, 나만의 생각을 기록하세요</p>
+                
+                <form id="login-form" class="login-form">
+                    <div class="form-group">
+                        <label for="repo-url">Repository URL</label>
+                        <input 
+                            type="text" 
+                            id="repo-url" 
+                            placeholder="https://github.com/username/morning-pages-private"
+                            required
+                        >
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="access-token">Personal Access Token</label>
+                        <input 
+                            type="password" 
+                            id="access-token" 
+                            placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
+                            required
+                        >
+                    </div>
+                    
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="remember-login">
+                            <span class="checkmark"></span>
+                            30일간 자동 로그인
+                        </label>
+                    </div>
+                    
+                    <button type="submit" class="login-btn">로그인</button>
+                    
+                    <div class="help-link">
+                        <a href="#" id="token-guide">Personal Access Token 생성 가이드</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- 메인 애플리케이션 -->
+        <div id="main-screen" class="screen hidden">
+            <header class="app-header">
+                <div class="header-left">
+                    <h1 class="app-logo">Morning Pages</h1>
+                </div>
+                <div class="header-right">
+                    <span id="user-info" class="user-info"></span>
+                    <button id="logout-btn" class="logout-btn">로그아웃</button>
+                </div>
+            </header>
+
+            <main class="app-main">
+                <aside class="sidebar">
+                    <div class="sidebar-header">
+                        <h3>파일</h3>
+                    </div>
+                    <div id="file-tree" class="file-tree">
+                        <!-- 파일 트리가 여기에 동적으로 생성됩니다 -->
+                    </div>
+                </aside>
+
+                <section class="editor-section">
+                    <div class="editor-header">
+                        <div class="editor-title">
+                            <span id="current-file">새 글 작성</span>
+                        </div>
+                        <div class="editor-stats">
+                            <span id="char-count">0</span> / 1000자
+                        </div>
+                    </div>
+                    
+                    <div class="editor-container">
+                        <textarea 
+                            id="editor" 
+                            class="editor-textarea"
+                            placeholder="오늘의 생각을 자유롭게 적어보세요...
+
+모닝페이지는 의식의 흐름대로 작성하는 것이 중요합니다.
+- 맞춤법이나 문법에 신경쓰지 마세요
+- 생각나는 대로 자유롭게 써보세요
+- 최소 1000자 이상 작성해주세요"
+                        ></textarea>
+                    </div>
+
+                    <div class="editor-footer">
+                        <div class="editor-actions">
+                            <button id="save-btn" class="save-btn" disabled>저장하기</button>
+                        </div>
+                        <div class="writing-time">
+                            <span id="writing-time"></span>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="preview-section">
+                    <div class="preview-header">
+                        <h3>미리보기</h3>
+                    </div>
+                    <div id="preview" class="preview-content">
+                        <!-- 마크다운 미리보기가 여기에 표시됩니다 -->
+                    </div>
+                </section>
+            </main>
+
+            <!-- 작성 현황 히트맵 -->
+            <section class="heatmap-section">
+                <div class="heatmap-header">
+                    <h3>작성 현황</h3>
+                </div>
+                <div id="heatmap" class="heatmap-container">
+                    <!-- 히트맵이 여기에 동적으로 생성됩니다 -->
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- 토큰 가이드 모달 -->
+    <div id="token-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Personal Access Token 생성 가이드</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <ol>
+                    <li>GitHub.com에 로그인</li>
+                    <li>Settings → Developer settings → Personal access tokens</li>
+                    <li>"Generate new token (classic)" 클릭</li>
+                    <li>Token name: "Morning Pages Web App"</li>
+                    <li>Expiration: 90 days 또는 1 year</li>
+                    <li>Select scopes: ☑️ repo (Full control of private repositories)</li>
+                    <li>Generate token → 생성된 토큰을 복사하여 입력</li>
+                </ol>
+                <p class="modal-note">⚠️ 토큰은 한 번만 표시되므로 반드시 복사해두세요.</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/libs/marked.min.js"></script>
+    <script src="assets/libs/crypto-js.min.js"></script>
+    <script src="assets/js/utils.js"></script>
+    <script src="assets/js/auth.js"></script>
+    <script src="assets/js/github-api.js"></script>
+    <script src="assets/js/editor.js"></script>
+    <script src="assets/js/file-manager.js"></script>
+    <script src="assets/js/heatmap.js"></script>
+    <script src="assets/js/app.js"></script>
+</body>
+</html>
