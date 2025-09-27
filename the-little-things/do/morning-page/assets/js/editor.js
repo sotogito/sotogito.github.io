@@ -85,9 +85,15 @@ class EditorManager {
     handleKeydown(e) {
         // Backspace와 Delete 키 금지 (작성 중인 글 삭제 방지)
         if (e.key === 'Backspace' || e.key === 'Delete') {
-            e.preventDefault();
-            showError('작성 중인 내용은 삭제할 수 없습니다.');
-            return;
+            // 파일명에 날짜가 있는지 확인
+            const fileName = this.getCurrentFileName();
+            const hasDate = /\d{4}-\d{2}-\d{2}/.test(fileName);
+            
+            if (hasDate) {
+                e.preventDefault();
+                showError('작성 중인 내용은 삭제할 수 없습니다.');
+                return;
+            }
         }
 
         // Ctrl+S (저장)
@@ -185,7 +191,15 @@ class EditorManager {
         // 저장 버튼 상태 업데이트
         const saveBtn = document.getElementById('save-btn');
         if (saveBtn && !this.editor.disabled) {
-            saveBtn.disabled = count < 1000;
+            // 파일명에 날짜가 있는지 확인
+            const fileName = this.getCurrentFileName();
+            const hasDate = /\d{4}-\d{2}-\d{2}/.test(fileName);
+            
+            if (hasDate) {
+                saveBtn.disabled = count < 1000;
+            } else {
+                saveBtn.disabled = false; // 날짜가 없으면 글자수 제한 없음
+            }
         }
     }
 

@@ -500,7 +500,16 @@ class MorningPagesApp {
         
         // 저장 버튼 활성화/비활성화
         if (saveBtn) {
-            saveBtn.disabled = count < 1000;
+            // 파일명에 날짜가 있는지 확인
+            const titleInput = document.getElementById('file-title');
+            const fileName = titleInput ? titleInput.value.trim() : '';
+            const hasDate = /\d{4}-\d{2}-\d{2}/.test(fileName);
+            
+            if (hasDate) {
+                saveBtn.disabled = count < 1000;
+            } else {
+                saveBtn.disabled = false; // 날짜가 없으면 글자수 제한 없음
+            }
         }
     }
 
@@ -545,13 +554,16 @@ class MorningPagesApp {
         const saveBtn = document.getElementById('save-btn');
         const titleInput = document.getElementById('file-title');
         
-        if (!editor || countCharacters(editor.value) < 1000) {
+        // 현재 파일명 가져오기 (제목 입력 필드에서)
+        let fileName = titleInput ? titleInput.value.trim() : '';
+        
+        // 파일명에 날짜가 있는지 확인
+        const hasDate = /\d{4}-\d{2}-\d{2}/.test(fileName);
+        
+        if (!editor || (hasDate && countCharacters(editor.value) < 1000)) {
             showError('최소 1000자 이상 작성해주세요.');
             return;
         }
-
-        // 현재 파일명 가져오기 (제목 입력 필드에서)
-        let fileName = titleInput ? titleInput.value.trim() : '';
         if (!fileName) {
             fileName = formatDate(new Date());
         }
