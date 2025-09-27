@@ -70,10 +70,11 @@
 
             <main class="app-main">
                 <aside class="sidebar" id="sidebar">
-                    <div class="sidebar-header">
+                    <div class="sidebar-header" id="sidebar-header">
                         <h3>파일</h3>
                         <div class="sidebar-actions">
                             <button id="new-file-btn" class="sidebar-btn" title="새 파일">📄</button>
+                            <span class="mobile-toggle-icon">▼</span>
                         </div>
                     </div>
                     <div id="file-tree" class="file-tree">
@@ -118,8 +119,9 @@
                 </section>
 
                 <section class="preview-section">
-                    <div class="preview-header">
+                    <div class="preview-header" id="preview-header">
                         <h3>미리보기</h3>
+                        <span class="mobile-toggle-icon">▼</span>
                     </div>
                     <div id="preview" class="preview-content">
                         <!-- 마크다운 미리보기가 여기에 표시됩니다 -->
@@ -127,11 +129,11 @@
                 </section>
             </main>
 
-            <!-- 작성 현황 히트맵 -->
+            <!-- 작성 현황 히트맵 (웹에서는 원래 위치 유지) -->
             <section class="heatmap-section">
-                <div class="heatmap-header">
+                <div class="heatmap-header" id="heatmap-header">
                     <h3>작성 현황</h3>
-                    <button id="stats-toggle" class="stats-toggle-btn" title="작성 현황 토글">view</button>
+                    <span class="mobile-toggle-icon">▼</span>
                 </div>
                 <div id="heatmap" class="heatmap-container">
                     <!-- 히트맵이 여기에 동적으로 생성됩니다 -->

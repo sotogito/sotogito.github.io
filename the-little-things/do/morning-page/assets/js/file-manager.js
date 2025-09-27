@@ -16,6 +16,7 @@ class FileManager {
         this.fileTree = document.getElementById('file-tree');
         this.bindEvents();
         this.initResizeHandle();
+        this.initMobileToggle();
     }
 
     // 이벤트 바인딩
@@ -616,6 +617,125 @@ class FileManager {
                 document.body.classList.remove('resizing');
                 document.body.style.cursor = '';
                 sidebar.style.width = startWidth + 'px';
+            }
+        });
+    }
+
+    // 모바일 토글 기능 초기화
+    initMobileToggle() {
+        // 모든 토글 가능한 섹션들
+        const sections = [
+            {
+                header: document.getElementById('sidebar-header'),
+                content: document.getElementById('file-tree'),
+                icon: document.getElementById('sidebar-header')?.querySelector('.mobile-toggle-icon'),
+                name: 'file'
+            },
+            {
+                header: document.getElementById('preview-header'),
+                content: document.getElementById('preview'),
+                icon: document.getElementById('preview-header')?.querySelector('.mobile-toggle-icon'),
+                name: 'preview'
+            },
+            {
+                header: document.getElementById('heatmap-header'),
+                content: document.getElementById('heatmap'),
+                icon: document.getElementById('heatmap-header')?.querySelector('.mobile-toggle-icon'),
+                name: 'heatmap'
+            }
+        ];
+
+        // 모든 섹션 접기 함수
+        const closeAllSections = () => {
+            sections.forEach(section => {
+                if (section.content && section.icon) {
+                    section.content.classList.remove('expanded', 'show');
+                    section.icon.classList.add('collapsed');
+                }
+            });
+        };
+
+        // 각 섹션에 이벤트 리스너 추가
+        sections.forEach(section => {
+            if (section.header && section.content && section.icon) {
+                // 모바일에서 기본적으로 접혀있도록 설정
+                if (window.innerWidth <= 768) {
+                    section.content.classList.remove('expanded', 'show');
+                    section.icon.classList.add('collapsed');
+                }
+
+                section.header.addEventListener('click', (e) => {
+                    // 새 파일 버튼 클릭은 토글하지 않음 (파일 섹션만)
+                    if (section.name === 'file' && e.target.closest('#new-file-btn')) return;
+                    
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    console.log(`${section.name} section clicked, mobile: ${window.innerWidth <= 768}`);
+                    
+                    if (window.innerWidth <= 768) {
+                        // 현재 섹션이 열려있는지 확인
+                        const isCurrentlyExpanded = section.content.classList.contains('expanded');
+                        console.log(`${section.name} currently expanded: ${isCurrentlyExpanded}`);
+                        
+                        // 모든 섹션 닫기
+                        closeAllSections();
+                        
+                        // 현재 섹션이 닫혀있었다면 열기
+                        if (!isCurrentlyExpanded) {
+                            section.content.classList.add('expanded');
+                            section.icon.classList.remove('collapsed');
+                            console.log(`${section.name} opened`);
+                            
+                            // 히트맵인 경우 특별 처리
+                            if (section.name === 'heatmap') {
+                                // 기본 내용이 없으면 임시 내용 추가
+                                if (section.content.innerHTML.trim() === '') {
+                                    section.content.innerHTML = '<div style="padding: 20px; text-align: center; color: #666;">작성 현황을 불러오는 중...</div>';
+                                }
+                                console.log('Heatmap content set');
+                            }
+                        }
+                    } else {
+                        // 웹에서는 히트맵만 특별 처리
+                        if (section.name === 'heatmap') {
+                            section.content.classList.toggle('show');
+                        }
+                    }
+                });
+            }
+        });
+
+        // 화면 크기 변경 시 토글 상태 초기화
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768) {
+                // 데스크톱으로 전환 시 모든 섹션 펼치기
+                if (fileTree) {
+                    fileTree.classList.remove('collapsed', 'expanded');
+                }
+                if (previewContent) {
+                    previewContent.classList.remove('collapsed', 'expanded');
+                }
+                if (heatmapContainer) {
+                    heatmapContainer.classList.remove('collapsed', 'expanded');
+                }
+                if (sidebarToggleIcon) sidebarToggleIcon.classList.remove('collapsed');
+                if (previewToggleIcon) previewToggleIcon.classList.remove('collapsed');
+                if (heatmapToggleIcon) heatmapToggleIcon.classList.remove('collapsed');
+            } else {
+                // 모바일로 전환 시 모든 섹션 접기
+                if (fileTree) {
+                    fileTree.classList.remove('expanded', 'collapsed');
+                }
+                if (previewContent) {
+                    previewContent.classList.remove('expanded', 'collapsed');
+                }
+                if (heatmapContainer) {
+                    heatmapContainer.classList.remove('expanded', 'collapsed');
+                }
+                if (sidebarToggleIcon) sidebarToggleIcon.classList.add('collapsed');
+                if (previewToggleIcon) previewToggleIcon.classList.add('collapsed');
+                if (heatmapToggleIcon) heatmapToggleIcon.classList.add('collapsed');
             }
         });
     }
