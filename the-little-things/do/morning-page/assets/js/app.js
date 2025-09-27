@@ -591,25 +591,31 @@ class MorningPagesApp {
                     await window.fileManager.loadFiles();
                 }
                 
-                // 히트맵 업데이트
-                if (window.heatmapManager) {
-                    await window.heatmapManager.updateHeatmap();
-                }
-                
                 // 저장 후에는 계속 편집 가능 (같은 날이면)
                 const isEditable = window.fileManager ? window.fileManager.isFileEditable(fileName) : true;
                 if (isEditable) {
                     saveBtn.textContent = '저장하기';
                     showSuccess('저장되었습니다. 계속 편집할 수 있습니다.');
-                    
-                    // 히트맵 업데이트 이벤트 발생
-                    document.dispatchEvent(new CustomEvent('fileSaved', {
-                        detail: { fileName, content: editor.value }
-                    }));
                 } else {
                     // 하루가 지났으면 읽기 전용
                     window.editorManager.disableEditor();
                 }
+                
+                // 일기 파일인 경우에만 히트맵 업데이트 (날짜 형식 포함된 파일)
+                const isDiaryFile = /\d{4}-\d{2}-\d{2}/.test(fileName) && fileName.endsWith('.md');
+                if (isDiaryFile) {
+                    console.log('일기 파일 저장됨, 히트맵 업데이트 중...', fileName);
+                    if (window.heatmapManager) {
+                        await window.heatmapManager.updateHeatmap();
+                    }
+                } else {
+                    console.log('일반 파일 저장됨, 히트맵 업데이트 안함:', fileName);
+                }
+                
+                // 히트맵 업데이트 이벤트 발생
+                document.dispatchEvent(new CustomEvent('fileSaved', {
+                    detail: { fileName, content: editor.value }
+                }));
                 
             } else {
                 showError(result.error || '저장에 실패했습니다.');

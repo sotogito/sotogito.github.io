@@ -36,6 +36,12 @@ class FileManager {
             this.files = allContents.filter(item => item.type === 'file' && item.name.endsWith('.md'));
             this.folders = allContents.filter(item => item.type === 'dir');
             
+            // 처음 로드 시 모든 폴더를 접어둠
+            this.collapsedFolders.clear();
+            this.folders.forEach(folder => {
+                this.collapsedFolders.add(folder.fullPath);
+            });
+            
             this.renderFileTree();
             
             return this.files;
@@ -708,35 +714,19 @@ class FileManager {
 
         // 화면 크기 변경 시 토글 상태 초기화
         window.addEventListener('resize', () => {
-            if (window.innerWidth > 768) {
-                // 데스크톱으로 전환 시 모든 섹션 펼치기
-                if (fileTree) {
-                    fileTree.classList.remove('collapsed', 'expanded');
+            sections.forEach(section => {
+                if (section.content && section.icon) {
+                    if (window.innerWidth > 768) {
+                        // 데스크톱으로 전환 시 모든 섹션 펼치기
+                        section.content.classList.remove('collapsed', 'expanded');
+                        section.icon.classList.remove('collapsed');
+                    } else {
+                        // 모바일로 전환 시 모든 섹션 접기
+                        section.content.classList.remove('expanded', 'collapsed');
+                        section.icon.classList.add('collapsed');
+                    }
                 }
-                if (previewContent) {
-                    previewContent.classList.remove('collapsed', 'expanded');
-                }
-                if (heatmapContainer) {
-                    heatmapContainer.classList.remove('collapsed', 'expanded');
-                }
-                if (sidebarToggleIcon) sidebarToggleIcon.classList.remove('collapsed');
-                if (previewToggleIcon) previewToggleIcon.classList.remove('collapsed');
-                if (heatmapToggleIcon) heatmapToggleIcon.classList.remove('collapsed');
-            } else {
-                // 모바일로 전환 시 모든 섹션 접기
-                if (fileTree) {
-                    fileTree.classList.remove('expanded', 'collapsed');
-                }
-                if (previewContent) {
-                    previewContent.classList.remove('expanded', 'collapsed');
-                }
-                if (heatmapContainer) {
-                    heatmapContainer.classList.remove('expanded', 'collapsed');
-                }
-                if (sidebarToggleIcon) sidebarToggleIcon.classList.add('collapsed');
-                if (previewToggleIcon) previewToggleIcon.classList.add('collapsed');
-                if (heatmapToggleIcon) heatmapToggleIcon.classList.add('collapsed');
-            }
+            });
         });
     }
 }

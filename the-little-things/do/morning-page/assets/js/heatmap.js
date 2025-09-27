@@ -37,22 +37,99 @@ class HeatmapManager {
         }
     }
 
-    // 커밋 데이터 로드
+    // 일기 파일 데이터 로드 (커밋 대신 파일 기반)
     async loadCommitData(year = null) {
         try {
             const targetYear = year || this.currentYear;
             
-            if (!window.githubAPI) {
-                throw new Error('GitHub API가 초기화되지 않았습니다.');
+            if (!window.fileManager) {
+                throw new Error('File Manager가 초기화되지 않았습니다.');
             }
 
-            this.commitData = await window.githubAPI.getYearlyCommitData(targetYear);
+            // 일기 파일들에서 히트맵 데이터 생성
+            this.commitData = await this.generateHeatmapFromFiles(targetYear);
             this.renderHeatmap(targetYear);
             
         } catch (error) {
-            console.error('Failed to load commit data:', error);
+            console.error('Failed to load diary data:', error);
             this.renderEmptyHeatmap();
         }
+    }
+
+    // 일기 파일들로부터 히트맵 데이터 생성
+    async generateHeatmapFromFiles(year) {
+        const diaryFiles = {};
+        
+        // 파일 매니저에서 모든 파일 가져오기
+        const files = window.fileManager.files || [];
+        
+        for (const file of files) {
+            // 파일의 전체 경로 확인 (fullPath, path, name 순으로 우선순위)
+            const filePath = file.fullPath || file.path || file.name;
+            const fileName = file.name || filePath.split('/').pop();
+            
+            // 날짜 형식이 포함된 파일인지 확인 (YYYY-MM-DD 패턴)
+            const dateMatch = fileName.match(/(\d{4})-(\d{2})-(\d{2})/);
+            if (!dateMatch) continue;
+            
+            const [fullMatch, fileYear, month, day] = dateMatch;
+            const fileDate = `${fileYear}-${month}-${day}`;
+            
+            // 해당 연도 파일만 처리
+            if (parseInt(fileYear) !== year) continue;
+            
+            console.log(`일기 파일 후보 발견: ${fileName} (경로: ${filePath}, 날짜: ${fileDate})`);
+            
+            try {
+                // GitHub API로 파일의 커밋 정보 가져오기 (전체 경로 사용)
+                const commitInfo = await window.githubAPI.getFileCommitInfo(filePath);
+                
+                if (commitInfo && commitInfo.date) {
+                    const commitDate = new Date(commitInfo.date);
+                    const hour = commitDate.getHours();
+                    
+                    diaryFiles[fileDate] = {
+                        count: 1,
+                        hour: hour,
+                        commits: [{
+                            date: commitInfo.date,
+                            message: `일기: ${fileDate}`,
+                            fileName: filePath // 전체 경로 저장
+                        }]
+                    };
+                    
+                    console.log(`일기 파일 발견: ${fileName}, 경로: ${filePath}, 작성 시간: ${hour}시`);
+                } else {
+                    console.log(`커밋 정보 없음, 기본값 적용: ${fileName} (경로: ${filePath})`);
+                    // 커밋 정보가 없어도 일기 형식이면 기본 초록색으로 표시
+                    diaryFiles[fileDate] = {
+                        count: 1,
+                        hour: 9, // 기본 오전 시간 (초록색)
+                        commits: [{
+                            date: new Date().toISOString(), // 현재 시간으로 대체
+                            message: `일기: ${fileDate} (기본값)`,
+                            fileName: filePath // 전체 경로 저장
+                        }]
+                    };
+                }
+            } catch (error) {
+                console.error(`커밋 정보 가져오기 실패: ${fileName} (경로: ${filePath})`, error);
+                // 에러가 발생해도 일기 형식이면 기본 초록색으로 표시
+                diaryFiles[fileDate] = {
+                    count: 1,
+                    hour: 9, // 기본 오전 시간 (초록색)
+                    commits: [{
+                        date: new Date().toISOString(),
+                        message: `일기: ${fileDate} (에러 시 기본값)`,
+                        fileName: filePath // 전체 경로 저장
+                    }]
+                };
+                console.log(`에러 발생, 기본 초록색 적용: ${fileName} (경로: ${filePath})`);
+            }
+        }
+        
+        console.log(`${year}년 일기 파일 ${Object.keys(diaryFiles).length}개 발견`);
+        return diaryFiles;
     }
 
     // 히트맵 렌더링
@@ -134,14 +211,19 @@ class HeatmapManager {
                 cell.classList.add(colorClass);
                 cell.dataset.count = commitInfo.count;
                 cell.dataset.hour = commitInfo.hour;
+                // 실제 파일명 저장
+                if (commitInfo.commits && commitInfo.commits[0]) {
+                    cell.dataset.fileName = commitInfo.commits[0].fileName;
+                }
             }
             
             // 툴팁 정보
             cell.title = this.generateTooltip(dateString, commitInfo);
             
             // 클릭 이벤트
-            cell.addEventListener('click', () => {
-                this.handleCellClick(dateString, commitInfo);
+            cell.addEventListener('click', (e) => {
+                const fileName = e.target.dataset.fileName;
+                this.handleCellClick(dateString, commitInfo, fileName);
             });
             
             heatmapCells.appendChild(cell);
@@ -209,12 +291,19 @@ class HeatmapManager {
     }
 
     // 셀 클릭 처리
-    handleCellClick(dateString, commitInfo) {
-        if (commitInfo) {
-            // 해당 날짜의 파일 열기
-            const fileName = `${dateString}.md`;
+    handleCellClick(dateString, commitInfo, fileName = null) {
+        if (commitInfo && fileName) {
+            // 실제 파일명으로 열기
+            console.log(`히트맵에서 파일 열기: ${fileName}`);
             if (window.fileManager) {
                 window.fileManager.openFile(fileName);
+            }
+        } else if (commitInfo) {
+            // 기본 파일명으로 시도
+            const defaultFileName = `${dateString}.md`;
+            console.log(`기본 파일명으로 시도: ${defaultFileName}`);
+            if (window.fileManager) {
+                window.fileManager.openFile(defaultFileName);
             }
         } else {
             // 새 파일 생성 (과거 날짜는 불가)
@@ -315,9 +404,18 @@ class HeatmapManager {
         };
     }
 
-    // 히트맵 업데이트
+    // 히트맵 업데이트 (일기 파일 저장 후)
     async updateHeatmap() {
-        await this.loadCommitData(this.currentYear);
+        console.log('Updating heatmap after diary file save...');
+        try {
+            // 약간의 딜레이를 두고 업데이트 (GitHub API 반영 시간)
+            setTimeout(async () => {
+                await this.loadCommitData(this.currentYear);
+                console.log('Heatmap updated successfully');
+            }, 1000);
+        } catch (error) {
+            console.error('Failed to update heatmap:', error);
+        }
     }
 
     // 연도 변경
