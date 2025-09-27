@@ -528,7 +528,8 @@ class MorningPagesApp {
                 const date = new Date(fileDate);
                 const timeStr = date.toLocaleTimeString('ko-KR', { 
                     hour: '2-digit', 
-                    minute: '2-digit' 
+                    minute: '2-digit',
+                    hour12: false
                 });
                 writingTime.textContent = `작성 시간: ${timeStr}`;
             } else {
