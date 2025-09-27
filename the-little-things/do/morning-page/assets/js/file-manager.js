@@ -430,10 +430,10 @@ class FileManager {
         today.setHours(0, 0, 0, 0);
         
         console.log('File date:', fileDateObj, 'Today:', today);
-        console.log('File editable:', fileDateObj.getTime() >= today.getTime());
+        console.log('File editable:', fileDateObj.getTime() === today.getTime());
         
-        // 파일 날짜가 오늘 이후이면 편집 가능 (같은 날 포함)
-        return fileDateObj.getTime() >= today.getTime();
+        // 파일 날짜가 오늘과 같으면 편집 가능
+        return fileDateObj.getTime() === today.getTime();
     }
 
     // 편집 모달 표시
