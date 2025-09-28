@@ -51,7 +51,6 @@ class HeatmapManager {
             this.renderHeatmap(targetYear);
             
         } catch (error) {
-            console.error('Failed to load diary data:', error);
             this.renderEmptyHeatmap();
         }
     }
@@ -74,8 +73,6 @@ class HeatmapManager {
             return fileYear === year;
         });
         
-        console.log(`${year}년 일기 파일 ${targetYearFiles.length}개 발견, 병렬로 커밋 정보 조회 중...`);
-        
         // 모든 파일의 커밋 정보를 병렬로 가져오기
         const commitPromises = targetYearFiles.map(async (file) => {
             const filePath = file.fullPath || file.path || file.name;
@@ -93,7 +90,6 @@ class HeatmapManager {
                     commitInfo
                 };
             } catch (error) {
-                console.error(`커밋 정보 가져오기 실패: ${fileName}`, error);
                 return {
                     fileDate,
                     filePath,
@@ -121,8 +117,6 @@ class HeatmapManager {
                         fileName: filePath
                     }]
                 };
-                
-                console.log(`일기 파일 발견: ${fileName}, 작성 시간: ${hour}시`);
             } else {
                 // 커밋 정보가 없어도 일기 형식이면 기본 초록색으로 표시
                 diaryFiles[fileDate] = {
@@ -134,11 +128,8 @@ class HeatmapManager {
                         fileName: filePath
                     }]
                 };
-                console.log(`커밋 정보 없음, 기본값 적용: ${fileName}`);
             }
         });
-        
-        console.log(`${year}년 일기 파일 ${Object.keys(diaryFiles).length}개 처리 완료`);
         return diaryFiles;
     }
 
@@ -304,14 +295,12 @@ class HeatmapManager {
     handleCellClick(dateString, commitInfo, fileName = null) {
         if (commitInfo && fileName) {
             // 실제 파일명으로 열기
-            console.log(`히트맵에서 파일 열기: ${fileName}`);
             if (window.fileManager) {
                 window.fileManager.openFile(fileName);
             }
         } else if (commitInfo) {
             // 기본 파일명으로 시도
             const defaultFileName = `${dateString}.md`;
-            console.log(`기본 파일명으로 시도: ${defaultFileName}`);
             if (window.fileManager) {
                 window.fileManager.openFile(defaultFileName);
             }
@@ -416,15 +405,13 @@ class HeatmapManager {
 
     // 히트맵 업데이트 (일기 파일 저장 후)
     async updateHeatmap() {
-        console.log('Updating heatmap after diary file save...');
         try {
             // 약간의 딜레이를 두고 업데이트 (GitHub API 반영 시간)
             setTimeout(async () => {
                 await this.loadCommitData(this.currentYear);
-                console.log('Heatmap updated successfully');
             }, 1000);
         } catch (error) {
-            console.error('Failed to update heatmap:', error);
+            // 에러 처리
         }
     }
 

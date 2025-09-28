@@ -590,30 +590,18 @@ class MorningPagesApp {
             const hasFileNameChanged = window.editorManager && window.editorManager.hasFileNameChanged();
             const originalPath = window.editorManager ? window.editorManager.getOriginalFilePath() : null;
             
-            console.log('저장 시작:', {
-                fileName,
-                originalPath,
-                hasFileNameChanged,
-                isNewFile: !originalPath
-            });
-            
             if (hasFileNameChanged) {
                 // 파일명이 변경된 경우: 새 파일로 저장하고 기존 파일 삭제
-                console.log('파일명이 변경됨:', originalPath, '->', fileName);
-                
                 // 1. 새 파일로 저장
                 result = await window.githubAPI.saveFile(fileName, content);
                 
                 if (result.success) {
                     // 2. 기존 파일 삭제
-                    console.log('기존 파일 삭제 시도:', originalPath);
                     const deleteResult = await window.githubAPI.deleteFile(originalPath, `Rename ${originalPath} to ${fileName}`);
                     
                     if (deleteResult.success) {
-                        console.log('기존 파일 삭제 성공:', originalPath);
                         showSuccess('저장되었습니다!');
                     } else {
-                        console.log('기존 파일 삭제 실패:', deleteResult.error);
                         showSuccess('저장되었습니다!');
                     }
                     
@@ -622,7 +610,6 @@ class MorningPagesApp {
                 }
             } else {
                 // 파일명이 변경되지 않은 경우: 기존 파일 업데이트
-                console.log('기존 파일 업데이트:', fileName);
                 result = await window.githubAPI.saveFile(fileName, content);
                 
                 if (result.success) {
@@ -652,12 +639,9 @@ class MorningPagesApp {
                 // 일기 파일인 경우에만 히트맵 업데이트 (날짜 형식 포함된 파일)
                 const isDiaryFile = /\d{4}-\d{2}-\d{2}/.test(fileName) && fileName.endsWith('.md');
                 if (isDiaryFile) {
-                    console.log('일기 파일 저장됨, 히트맵 업데이트 중...', fileName);
                     if (window.heatmapManager) {
                         await window.heatmapManager.updateHeatmap();
                     }
-                } else {
-                    console.log('일반 파일 저장됨, 히트맵 업데이트 안함:', fileName);
                 }
                 
                 // 히트맵 업데이트 이벤트 발생
@@ -731,13 +715,10 @@ class MorningPagesApp {
 
     // 파일/폴더 생성 모달 표시
     showCreateModal(type) {
-        console.log('showCreateModal 호출됨, type:', type);
-        
         const modal = document.getElementById('create-modal');
         const title = document.getElementById('create-modal-title');
         const pathInput = document.getElementById('create-path');
-        
-        console.log('Modal elements:', { modal: !!modal, title: !!title, pathInput: !!pathInput });
+
         
         if (!modal || !title || !pathInput) {
             console.error('모달 요소를 찾을 수 없습니다:', { modal: !!modal, title: !!title, pathInput: !!pathInput });
@@ -760,9 +741,7 @@ class MorningPagesApp {
         // 입력 필드 초기화
         pathInput.value = '';
         
-        console.log('모달 표시 전 hidden 클래스:', modal.classList.contains('hidden'));
         modal.classList.remove('hidden');
-        console.log('모달 표시 후 hidden 클래스:', modal.classList.contains('hidden'));
         
         // 포커스 설정
         setTimeout(() => {
@@ -772,12 +751,10 @@ class MorningPagesApp {
 
     // 파일/폴더 생성 처리
     async handleCreateFileOrFolder() {
-        console.log('handleCreateFileOrFolder 호출됨');
         
         const pathInput = document.getElementById('create-path');
         const modal = document.getElementById('create-modal');
         
-        console.log('Elements:', { pathInput: !!pathInput, modal: !!modal });
         
         if (!pathInput) {
             console.error('입력 필드를 찾을 수 없습니다');
@@ -786,12 +763,10 @@ class MorningPagesApp {
         }
         
         let path = pathInput.value.trim();
-        console.log('입력된 경로:', path);
         
         // 빈 입력일 때 기본값
         if (!path) {
             path = formatDate(new Date());
-            console.log('기본값 사용:', path);
         }
         
         try {
@@ -817,11 +792,9 @@ class MorningPagesApp {
                     titleInput.value = fileName.replace('.md', '');
                 }
                 
-                console.log('새 파일 준비됨:', fileName);
                 showSuccess('새 파일이 준비되었습니다.');
             } else {
                 // 폴더 생성 (현재는 지원하지 않음)
-                console.log('폴더 생성 요청:', fileName);
                 showError('폴더 생성은 현재 지원하지 않습니다.');
             }
             
@@ -829,7 +802,6 @@ class MorningPagesApp {
             if (modal) {
                 modal.classList.add('hidden');
                 pathInput.value = '';
-                console.log('모달 닫힘');
             }
             
         } catch (error) {
@@ -884,8 +856,6 @@ class MorningPagesApp {
     
     // 생성 모달 이벤트 바인딩 (완전히 새로 작성 - 절대 실패하지 않는 방식)
     bindCreateModalEvents() {
-        console.log('bindCreateModalEvents 호출됨 - 절대 실패하지 않는 방식');
-
         // 모달 표시 함수
         const showModal = (type) => {
             const modal = document.getElementById('create-modal');
@@ -1005,7 +975,6 @@ class MorningPagesApp {
             // 새 파일 버튼
             if (e.target && e.target.id === 'new-file-btn') {
                 e.preventDefault();
-                console.log('새파일 버튼 클릭됨 - 전역 리스너');
                 showModal('file');
                 return;
             }
@@ -1015,7 +984,6 @@ class MorningPagesApp {
             if (e.target && e.target.id === 'create-confirm') {
                 e.preventDefault();
                 e.stopPropagation();
-                console.log('생성 버튼 클릭됨 - 전역 리스너');
                 handleCreate();
                 // 직접 모달 닫기
                 const modal = document.getElementById('create-modal');
@@ -1029,7 +997,6 @@ class MorningPagesApp {
             if (e.target && e.target.id === 'modal-close-x') {
                 e.preventDefault();
                 e.stopPropagation();
-                console.log('닫기 버튼 클릭됨 - 전역 리스너');
                 // 직접 모달 닫기
                 const modal = document.getElementById('create-modal');
                 const pathInput = document.getElementById('create-path');
@@ -1040,7 +1007,6 @@ class MorningPagesApp {
             
             // 배경 클릭
             if (e.target && e.target.id === 'create-modal') {
-                console.log('배경 클릭됨 - 전역 리스너');
                 // 직접 모달 닫기
                 const modal = document.getElementById('create-modal');
                 const pathInput = document.getElementById('create-path');
@@ -1057,12 +1023,10 @@ class MorningPagesApp {
             
             if (modal && !modal.classList.contains('hidden') && e.key === 'Enter' && pathInput === document.activeElement) {
                 e.preventDefault();
-                console.log('Enter 키 눌림 - 전역 리스너');
                 handleCreate();
             }
         });
 
-        console.log('모달 이벤트 바인딩 완료 - 전역 리스너 방식');
     }
 }
 

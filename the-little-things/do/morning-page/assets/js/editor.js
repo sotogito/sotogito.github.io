@@ -341,13 +341,6 @@ class EditorManager {
         const normalizedOriginal = normalizePath(this.originalFilePath);
         const normalizedCurrent = normalizePath(currentFileName);
         
-        console.log('파일명 변경 확인:', {
-            original: this.originalFilePath,
-            current: currentFileName,
-            normalizedOriginal,
-            normalizedCurrent,
-            changed: normalizedOriginal !== normalizedCurrent
-        });
         
         return normalizedOriginal !== normalizedCurrent;
     }

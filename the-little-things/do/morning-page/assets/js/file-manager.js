@@ -439,9 +439,6 @@ class FileManager {
         // 시간을 00:00:00으로 설정하여 날짜만 비교
         today.setHours(0, 0, 0, 0);
         
-        console.log('File date:', fileDateObj, 'Today:', today);
-        console.log('File editable:', fileDateObj.getTime() === today.getTime());
-        
         // 파일 날짜가 오늘과 같으면 편집 가능
         return fileDateObj.getTime() === today.getTime();
     }
@@ -677,12 +674,11 @@ class FileManager {
                     e.preventDefault();
                     e.stopPropagation();
                     
-                    console.log(`${section.name} section clicked, mobile: ${window.innerWidth <= 768}`);
                     
                     if (window.innerWidth <= 768) {
                         // 현재 섹션이 열려있는지 확인
                         const isCurrentlyExpanded = section.content.classList.contains('expanded');
-                        console.log(`${section.name} currently expanded: ${isCurrentlyExpanded}`);
+                   
                         
                         // 모든 섹션 닫기
                         closeAllSections();
@@ -691,7 +687,7 @@ class FileManager {
                         if (!isCurrentlyExpanded) {
                             section.content.classList.add('expanded');
                             section.icon.classList.remove('collapsed');
-                            console.log(`${section.name} opened`);
+               
                             
                             // 히트맵인 경우 특별 처리
                             if (section.name === 'heatmap') {

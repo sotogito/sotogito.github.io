@@ -58,7 +58,8 @@ class GitHubAPI {
     // 특정 파일 내용 가져오기
     async getFile(fileName) {
         try {
-            const endpoint = `/repos/${this.owner}/${this.repo}/contents/${fileName}`;
+            const encodedFileName = encodeURIComponent(fileName);
+            const endpoint = `/repos/${this.owner}/${this.repo}/contents/${encodedFileName}`;
             const response = await this.apiRequest(endpoint);
             
             // Base64 디코딩
@@ -77,7 +78,8 @@ class GitHubAPI {
     // 특정 파일의 커밋 정보 가져오기 (작성 시간 확인용)
     async getFileCommitInfo(fileName) {
         try {
-            const endpoint = `/repos/${this.owner}/${this.repo}/commits?path=${fileName}&per_page=1`;
+            const encodedFileName = encodeURIComponent(fileName);
+            const endpoint = `/repos/${this.owner}/${this.repo}/commits?path=${encodedFileName}&per_page=1`;
             const commits = await this.apiRequest(endpoint);
             
             if (commits && commits.length > 0) {
@@ -100,27 +102,19 @@ class GitHubAPI {
             const today = formatDate(new Date());
             const commitMessage = message || `from sukipi.me ${today}`;
             
-            console.log('GitHub API saveFile 시작:', {
-                fileName,
-                message: commitMessage,
-                contentLength: content.length
-            });
+
             
             // 기존 파일이 있는지 확인 (SHA 값 필요)
             let sha = null;
             let isUpdate = false;
             try {
-                const existingFile = await this.apiRequest(`/repos/${this.owner}/${this.repo}/contents/${fileName}`);
+                const encodedFileName = encodeURIComponent(fileName);
+                const existingFile = await this.apiRequest(`/repos/${this.owner}/${this.repo}/contents/${encodedFileName}`);
                 sha = existingFile.sha;
                 isUpdate = true;
-                console.log('기존 파일 발견, 업데이트 모드:', {
-                    fileName,
-                    sha: sha.substring(0, 8) + '...',
-                    size: existingFile.size
-                });
+           
             } catch (error) {
-                // 파일이 없으면 새로 생성
-                console.log('새 파일 생성 모드:', fileName);
+           
             }
 
             // 파일 내용을 Base64로 인코딩
@@ -137,25 +131,15 @@ class GitHubAPI {
                 requestBody.sha = sha;
             }
 
-            console.log('GitHub API 요청:', {
-                fileName,
-                isUpdate,
-                hasSha: !!sha,
-                message: commitMessage
-            });
 
-            const endpoint = `/repos/${this.owner}/${this.repo}/contents/${fileName}`;
+            const encodedFileName = encodeURIComponent(fileName);
+            const endpoint = `/repos/${this.owner}/${this.repo}/contents/${encodedFileName}`;
             const result = await this.apiRequest(endpoint, {
                 method: 'PUT',
                 body: JSON.stringify(requestBody)
             });
 
-            console.log('GitHub API 저장 성공:', {
-                fileName,
-                isUpdate,
-                commitSha: result.commit.sha.substring(0, 8) + '...'
-            });
-
+       
             return {
                 success: true,
                 data: result,
@@ -301,28 +285,16 @@ class GitHubAPI {
             // 커밋 메시지 생성
             const today = formatDate(new Date());
             const commitMessage = message || `Delete ${fileName} from sukipi.me ${today}`;
-            
-            console.log('GitHub API deleteFile 시작:', {
-                fileName,
-                message: commitMessage
-            });
-            
+     
             // 기존 파일의 SHA 값 가져오기
             let sha = null;
             try {
-                const existingFile = await this.apiRequest(`/repos/${this.owner}/${this.repo}/contents/${fileName}`);
+                const encodedFileName = encodeURIComponent(fileName);
+                const existingFile = await this.apiRequest(`/repos/${this.owner}/${this.repo}/contents/${encodedFileName}`);
                 sha = existingFile.sha;
-                console.log('삭제할 파일 발견:', {
-                    fileName,
-                    sha: sha.substring(0, 8) + '...',
-                    size: existingFile.size
-                });
+           
             } catch (error) {
-                console.log('삭제할 파일이 존재하지 않음:', fileName);
-                return {
-                    success: true,
-                    message: '파일이 이미 존재하지 않습니다.'
-                };
+           
             }
 
             const requestBody = {
@@ -331,22 +303,16 @@ class GitHubAPI {
                 branch: 'main'
             };
 
-            console.log('GitHub API 삭제 요청:', {
-                fileName,
-                sha: sha.substring(0, 8) + '...',
-                message: commitMessage
-            });
+    
 
-            const endpoint = `/repos/${this.owner}/${this.repo}/contents/${fileName}`;
+            const encodedFileName = encodeURIComponent(fileName);
+            const endpoint = `/repos/${this.owner}/${this.repo}/contents/${encodedFileName}`;
             const result = await this.apiRequest(endpoint, {
                 method: 'DELETE',
                 body: JSON.stringify(requestBody)
             });
 
-            console.log('GitHub API 삭제 성공:', {
-                fileName,
-                commitSha: result.commit.sha.substring(0, 8) + '...'
-            });
+        
 
             return {
                 success: true,
