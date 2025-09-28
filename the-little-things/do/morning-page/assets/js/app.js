@@ -470,6 +470,9 @@ class MorningPagesApp {
         // 새 파일은 편집 가능하게 설정
         if (window.editorManager) {
             window.editorManager.enableEditor();
+            // 새 파일이므로 원본 경로를 null로 설정
+            window.editorManager.originalFilePath = null;
+            window.editorManager.currentFile = fileName;
         }
         
         this.updateCharCount();
@@ -581,11 +584,54 @@ class MorningPagesApp {
 
         try {
             const content = editor.value;
-            const result = await window.githubAPI.saveFile(fileName, content);
+            let result;
+            
+            // 파일명이 변경되었는지 확인
+            const hasFileNameChanged = window.editorManager && window.editorManager.hasFileNameChanged();
+            const originalPath = window.editorManager ? window.editorManager.getOriginalFilePath() : null;
+            
+            console.log('저장 시작:', {
+                fileName,
+                originalPath,
+                hasFileNameChanged,
+                isNewFile: !originalPath
+            });
+            
+            if (hasFileNameChanged) {
+                // 파일명이 변경된 경우: 새 파일로 저장하고 기존 파일 삭제
+                console.log('파일명이 변경됨:', originalPath, '->', fileName);
+                
+                // 1. 새 파일로 저장
+                result = await window.githubAPI.saveFile(fileName, content);
+                
+                if (result.success) {
+                    // 2. 기존 파일 삭제
+                    console.log('기존 파일 삭제 시도:', originalPath);
+                    const deleteResult = await window.githubAPI.deleteFile(originalPath, `Rename ${originalPath} to ${fileName}`);
+                    
+                    if (deleteResult.success) {
+                        console.log('기존 파일 삭제 성공:', originalPath);
+                        showSuccess('저장되었습니다!');
+                    } else {
+                        console.log('기존 파일 삭제 실패:', deleteResult.error);
+                        showSuccess('저장되었습니다!');
+                    }
+                    
+                    // 에디터 매니저의 원본 경로 업데이트
+                    window.editorManager.originalFilePath = fileName;
+                }
+            } else {
+                // 파일명이 변경되지 않은 경우: 기존 파일 업데이트
+                console.log('기존 파일 업데이트:', fileName);
+                result = await window.githubAPI.saveFile(fileName, content);
+                
+                if (result.success) {
+                    const isUpdate = result.isUpdate ? '업데이트' : '생성';
+                    showSuccess(`파일이 ${isUpdate}되었습니다!`);
+                }
+            }
             
             if (result.success) {
-                showSuccess('저장되었습니다!');
-                
                 // 파일 목록 새로고침
                 if (window.fileManager) {
                     await window.fileManager.loadFiles();
@@ -595,7 +641,9 @@ class MorningPagesApp {
                 const isEditable = window.fileManager ? window.fileManager.isFileEditable(fileName) : true;
                 if (isEditable) {
                     saveBtn.textContent = '저장하기';
-                    showSuccess('저장되었습니다. 계속 편집할 수 있습니다.');
+                    if (!window.editorManager || !window.editorManager.hasFileNameChanged()) {
+                        showSuccess('저장되었습니다. 계속 편집할 수 있습니다.');
+                    }
                 } else {
                     // 하루가 지났으면 읽기 전용
                     window.editorManager.disableEditor();
@@ -921,6 +969,13 @@ class MorningPagesApp {
                     titleInput.disabled = false;
                     titleInput.style.backgroundColor = 'transparent';
                     titleInput.style.color = '#333';
+                }
+                
+                // 에디터 매니저에 새 파일 정보 설정
+                if (window.editorManager) {
+                    window.editorManager.currentFile = fileName;
+                    window.editorManager.originalFilePath = null; // 새 파일이므로 원본 경로 없음
+                    window.editorManager.isDirty = false;
                 }
                 
                 // 저장 버튼 활성화

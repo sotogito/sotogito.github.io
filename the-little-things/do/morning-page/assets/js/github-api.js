@@ -100,15 +100,27 @@ class GitHubAPI {
             const today = formatDate(new Date());
             const commitMessage = message || `from sukipi.me ${today}`;
             
+            console.log('GitHub API saveFile 시작:', {
+                fileName,
+                message: commitMessage,
+                contentLength: content.length
+            });
+            
             // 기존 파일이 있는지 확인 (SHA 값 필요)
             let sha = null;
+            let isUpdate = false;
             try {
                 const existingFile = await this.apiRequest(`/repos/${this.owner}/${this.repo}/contents/${fileName}`);
                 sha = existingFile.sha;
-                
-                // 파일 수정 허용 - 하루 한 번 제한 제거
+                isUpdate = true;
+                console.log('기존 파일 발견, 업데이트 모드:', {
+                    fileName,
+                    sha: sha.substring(0, 8) + '...',
+                    size: existingFile.size
+                });
             } catch (error) {
                 // 파일이 없으면 새로 생성
+                console.log('새 파일 생성 모드:', fileName);
             }
 
             // 파일 내용을 Base64로 인코딩
@@ -125,15 +137,29 @@ class GitHubAPI {
                 requestBody.sha = sha;
             }
 
+            console.log('GitHub API 요청:', {
+                fileName,
+                isUpdate,
+                hasSha: !!sha,
+                message: commitMessage
+            });
+
             const endpoint = `/repos/${this.owner}/${this.repo}/contents/${fileName}`;
             const result = await this.apiRequest(endpoint, {
                 method: 'PUT',
                 body: JSON.stringify(requestBody)
             });
 
+            console.log('GitHub API 저장 성공:', {
+                fileName,
+                isUpdate,
+                commitSha: result.commit.sha.substring(0, 8) + '...'
+            });
+
             return {
                 success: true,
-                data: result
+                data: result,
+                isUpdate: isUpdate
             };
         } catch (error) {
             console.error('Failed to save file:', error);
@@ -269,14 +295,69 @@ class GitHubAPI {
         }
     }
 
-    // 파일 삭제 (사용하지 않을 예정이지만 완전성을 위해)
+    // 파일 삭제
     async deleteFile(fileName, message = null) {
         try {
-            // 삭제는 보안상 지원하지 않음
-            throw new Error('파일 삭제는 지원하지 않습니다.');
+            // 커밋 메시지 생성
+            const today = formatDate(new Date());
+            const commitMessage = message || `Delete ${fileName} from sukipi.me ${today}`;
+            
+            console.log('GitHub API deleteFile 시작:', {
+                fileName,
+                message: commitMessage
+            });
+            
+            // 기존 파일의 SHA 값 가져오기
+            let sha = null;
+            try {
+                const existingFile = await this.apiRequest(`/repos/${this.owner}/${this.repo}/contents/${fileName}`);
+                sha = existingFile.sha;
+                console.log('삭제할 파일 발견:', {
+                    fileName,
+                    sha: sha.substring(0, 8) + '...',
+                    size: existingFile.size
+                });
+            } catch (error) {
+                console.log('삭제할 파일이 존재하지 않음:', fileName);
+                return {
+                    success: true,
+                    message: '파일이 이미 존재하지 않습니다.'
+                };
+            }
+
+            const requestBody = {
+                message: commitMessage,
+                sha: sha,
+                branch: 'main'
+            };
+
+            console.log('GitHub API 삭제 요청:', {
+                fileName,
+                sha: sha.substring(0, 8) + '...',
+                message: commitMessage
+            });
+
+            const endpoint = `/repos/${this.owner}/${this.repo}/contents/${fileName}`;
+            const result = await this.apiRequest(endpoint, {
+                method: 'DELETE',
+                body: JSON.stringify(requestBody)
+            });
+
+            console.log('GitHub API 삭제 성공:', {
+                fileName,
+                commitSha: result.commit.sha.substring(0, 8) + '...'
+            });
+
+            return {
+                success: true,
+                data: result
+            };
         } catch (error) {
-            console.error('File deletion is not supported:', error);
-            throw error;
+            console.error('Failed to delete file:', error);
+            return {
+                success: false,
+                error: error.message
+            };
         }
     }
 

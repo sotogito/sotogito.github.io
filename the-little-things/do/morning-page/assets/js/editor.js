@@ -5,6 +5,7 @@ class EditorManager {
         this.editor = null;
         this.preview = null;
         this.currentFile = null;
+        this.originalFilePath = null; // 원본 파일 경로 추적
         this.isDirty = false;
         this.autoSaveTimer = null;
         
@@ -220,6 +221,7 @@ class EditorManager {
     // 파일 로드
     loadFile(fileName, content, commitInfo = null) {
         this.currentFile = fileName;
+        this.originalFilePath = fileName; // 원본 파일 경로 저장
         this.editor.value = content || '';
         this.editor.disabled = false;
         this.isDirty = false;
@@ -261,6 +263,7 @@ class EditorManager {
         const defaultFileName = `${today}.md`;
         
         this.loadFile(fileName || defaultFileName, '');
+        this.originalFilePath = null; // 새 파일이므로 원본 경로 없음
     }
 
     // 에디터 비활성화 (과거 파일 읽기 전용)
@@ -315,6 +318,38 @@ class EditorManager {
             return title.endsWith('.md') ? title : `${title}.md`;
         }
         return this.currentFile || `${formatDate(new Date())}.md`;
+    }
+
+    // 원본 파일 경로 가져오기
+    getOriginalFilePath() {
+        return this.originalFilePath;
+    }
+
+    // 파일명이 변경되었는지 확인
+    hasFileNameChanged() {
+        if (!this.originalFilePath) return false;
+        const currentFileName = this.getCurrentFileName();
+        
+        // 경로를 정규화하여 비교 (슬래시와 확장자 처리)
+        const normalizePath = (path) => {
+            if (!path) return '';
+            // .md 확장자 제거 후 다시 추가하여 일관성 확보
+            const withoutExt = path.replace(/\.md$/, '');
+            return withoutExt + '.md';
+        };
+        
+        const normalizedOriginal = normalizePath(this.originalFilePath);
+        const normalizedCurrent = normalizePath(currentFileName);
+        
+        console.log('파일명 변경 확인:', {
+            original: this.originalFilePath,
+            current: currentFileName,
+            normalizedOriginal,
+            normalizedCurrent,
+            changed: normalizedOriginal !== normalizedCurrent
+        });
+        
+        return normalizedOriginal !== normalizedCurrent;
     }
 
     // 현재 내용 가져오기
