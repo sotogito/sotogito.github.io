@@ -73,6 +73,28 @@ class HeatmapManager {
             return fileYear === year;
         });
         
+        // 500개를 넘으면 API 요청 없이 일괄 초록색으로 처리
+        if (targetYearFiles.length > 500) {
+            targetYearFiles.forEach(file => {
+                const filePath = file.fullPath || file.path || file.name;
+                const fileName = file.name || filePath.split('/').pop();
+                const dateMatch = fileName.match(/(\d{4})-(\d{2})-(\d{2})/);
+                const [fullMatch, fileYear, month, day] = dateMatch;
+                const fileDate = `${fileYear}-${month}-${day}`;
+                
+                diaryFiles[fileDate] = {
+                    count: 1,
+                    hour: 9, // 기본 오전 시간 (초록색)
+                    commits: [{
+                        date: new Date().toISOString(),
+                        message: `일기: ${fileDate} (대량 처리)`,
+                        fileName: filePath
+                    }]
+                };
+            });
+            return diaryFiles;
+        }
+        
         // 모든 파일의 커밋 정보를 병렬로 가져오기
         const commitPromises = targetYearFiles.map(async (file) => {
             const filePath = file.fullPath || file.path || file.name;
