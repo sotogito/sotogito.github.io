@@ -728,27 +728,17 @@ class MorningPagesApp {
     // 파일/폴더 생성 모달 표시
     showCreateModal(type) {
         const modal = document.getElementById('create-modal');
-        const title = document.getElementById('create-modal-title');
         const pathInput = document.getElementById('create-path');
 
         
-        if (!modal || !title || !pathInput) {
-            console.error('모달 요소를 찾을 수 없습니다:', { modal: !!modal, title: !!title, pathInput: !!pathInput });
+        if (!modal || !pathInput) {
+            console.error('모달 요소를 찾을 수 없습니다:', { modal: !!modal, pathInput: !!pathInput });
             showError('모달을 표시할 수 없습니다.');
             return;
         }
         
         // 현재 모달 타입 저장
         this.currentModalType = type;
-        
-        // 모달 타입에 따른 설정
-        if (type === 'file') {
-            title.textContent = '새 파일 생성';
-            pathInput.placeholder = '파일명.md';
-        } else {
-            title.textContent = '새 폴더 생성';
-            pathInput.placeholder = '폴더명';
-        }
         
         // 입력 필드 초기화
         pathInput.value = '';
@@ -871,19 +861,15 @@ class MorningPagesApp {
         // 모달 표시 함수
         const showModal = (type) => {
             const modal = document.getElementById('create-modal');
-            const title = document.getElementById('create-modal-title');
             const pathInput = document.getElementById('create-path');
             
-            if (!modal || !title || !pathInput) {
+            if (!modal || !pathInput) {
                 console.error('모달 요소를 찾을 수 없습니다');
                 return;
             }
 
             // 현재 모달 타입 저장
             this.currentModalType = type;
-            
-            // 파일 생성만 지원
-            title.textContent = '새 파일 생성';
             
             // 입력 필드 초기화
             pathInput.value = '';
@@ -1005,17 +991,6 @@ class MorningPagesApp {
                 return;
             }
             
-            // 닫기 버튼 (X 버튼만)
-            if (e.target && e.target.id === 'modal-close-x') {
-                e.preventDefault();
-                e.stopPropagation();
-                // 직접 모달 닫기
-                const modal = document.getElementById('create-modal');
-                const pathInput = document.getElementById('create-path');
-                if (modal) modal.classList.add('hidden');
-                if (pathInput) pathInput.value = '';
-                return;
-            }
             
             // 배경 클릭
             if (e.target && e.target.id === 'create-modal') {

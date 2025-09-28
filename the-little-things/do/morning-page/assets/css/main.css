@@ -285,7 +285,9 @@ body {
     background-color: transparent;
     border: 1px solid #e1e1e1;
     border-radius: 4px;
+    font-family: 'Playfair Display', 'Austin News Deck Web', serif;
     font-size: 13px;
+    font-weight: 300;
     color: #666;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -719,6 +721,7 @@ body {
     font-size: 14px;
     font-weight: 500;
     color: #333;
+    text-decoration: underline;
 }
 
 .stats-toggle-btn {
@@ -887,6 +890,7 @@ body {
     padding: 10px 20px;
     border: 0.5px solid #000;
     border-radius: 0;
+    font-family: 'Playfair Display', 'Austin News Deck Web', serif;
     font-size: 14px;
     font-weight: 300;
     cursor: pointer;
@@ -1183,6 +1187,7 @@ body {
         font-size: 14px;
         font-weight: 500;
         color: #333;
+        text-decoration: underline;
     }
     
     .heatmap-container {

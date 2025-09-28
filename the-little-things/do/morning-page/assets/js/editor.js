@@ -283,7 +283,7 @@ class EditorManager {
         const saveBtn = document.getElementById('save-btn');
         if (saveBtn) {
             saveBtn.disabled = true;
-            saveBtn.textContent = '읽기 전용';
+            saveBtn.textContent = 'read only';
             saveBtn.style.backgroundColor = '#ccc';
         }
     }

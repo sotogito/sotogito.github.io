@@ -14,7 +14,7 @@
         <!-- 로그인되지 않은 상태 -->
         <div id="login-screen" class="screen">
             <div class="login-container">
-                <h1 class="app-title">morning pages</h1>
+                <h1 class="app-title">morning pages 🌞</h1>
                 
                 <form id="login-form" class="login-form">
                     <div class="form-group">
@@ -63,16 +63,16 @@
                 </div>
                 <div class="header-right">
                     <span id="user-info" class="user-info"></span>
-                    <button id="logout-btn" class="logout-btn">로그아웃</button>
+                    <button id="logout-btn" class="logout-btn">Logout</button>
                 </div>
             </header>
 
             <main class="app-main">
                 <aside class="sidebar" id="sidebar">
                     <div class="sidebar-header" id="sidebar-header">
-                        <h3>파일</h3>
+                        <h3>files</h3>
                         <div class="sidebar-actions">
-                            <button id="new-file-btn" class="sidebar-btn" title="새 파일">📄</button>
+                            <button id="new-file-btn" class="sidebar-btn" title="new file">📄</button>
                             <span class="mobile-toggle-icon">▼</span>
                         </div>
                     </div>
@@ -87,7 +87,7 @@
                 <section class="editor-section">
                     <div class="editor-header">
                         <div class="editor-title">
-                            <input type="text" id="file-title" class="file-title-input" placeholder="파일 제목을 입력하세요" />
+                            <input type="text" id="file-title" class="file-title-input" placeholder="enter file title" />
                         </div>
                         <div class="editor-stats">
                             <span id="char-count">0</span> / 1000자
@@ -98,18 +98,13 @@
                         <textarea 
                             id="editor" 
                             class="editor-textarea"
-                            placeholder="오늘의 생각을 자유롭게 적어보세요...
-
-모닝페이지는 의식의 흐름대로 작성하는 것이 중요합니다.
-- 맞춤법이나 문법에 신경쓰지 마세요
-- 생각나는 대로 자유롭게 써보세요
-- 최소 1000자 이상 작성해주세요"
+                            placeholder="좋은 아침..."
                         ></textarea>
                     </div>
 
                     <div class="editor-footer">
                         <div class="editor-actions">
-                            <button id="save-btn" class="save-btn" disabled>저장하기</button>
+                            <button id="save-btn" class="save-btn" disabled>save</button>
                         </div>
                         <div class="writing-time">
                             <span id="writing-time"></span>
@@ -119,7 +114,7 @@
 
                 <section class="preview-section">
                     <div class="preview-header" id="preview-header">
-                        <h3>미리보기</h3>
+                        <h3>preview</h3>
                         <span class="mobile-toggle-icon">▼</span>
                     </div>
                     <div id="preview" class="preview-content">
@@ -131,7 +126,7 @@
             <!-- 작성 현황 히트맵 (웹에서는 원래 위치 유지) -->
             <section class="heatmap-section">
                 <div class="heatmap-header" id="heatmap-header">
-                    <h3>작성 현황</h3>
+                    <h3>hit page</h3>
                     <span class="mobile-toggle-icon">▼</span>
                 </div>
                 <div id="heatmap" class="heatmap-container">
@@ -220,20 +215,16 @@
         </div>
     </div>
 
-    <!-- 파일/폴더 생성 모달 (완전히 새로 작성) -->
+    <!-- 파일 생성 모달 -->
     <div id="create-modal" class="modal hidden" style="z-index: 9999;">
         <div class="modal-content" style="pointer-events: auto;">
-            <div class="modal-header">
-                <h3 id="create-modal-title">새 파일 생성</h3>
-                <button id="modal-close-x" type="button" style="cursor: pointer;">&times;</button>
-            </div>
             <div class="modal-body">
                 <div class="form-group">
                     <input type="text" id="create-path" style="width: 100%; padding: 8px;">
                 </div>
             </div>
             <div class="modal-footer">
-                <button id="create-confirm" class="modal-btn primary" type="button" style="cursor: pointer; padding: 8px 16px;">생성</button>
+                <button id="create-confirm" class="modal-btn primary" type="button" style="cursor: pointer; padding: 8px 16px;">create</button>
             </div>
         </div>
     </div>
@@ -242,20 +233,20 @@
     <div id="edit-modal" class="modal hidden">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>파일 편집</h3>
+                <h3>edit file</h3>
                 <button class="modal-close">&times;</button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label for="edit-path">새 경로</label>
+                    <label for="edit-path">new path</label>
                     <input type="text" id="edit-path" placeholder="folder/subfolder/filename.md">
-                    <small>파일 이름이나 위치를 변경할 수 있습니다</small>
+                    <small>you can change file name or location</small>
                 </div>
             </div>
             <div class="modal-footer">
-                <button id="edit-confirm" class="modal-btn primary">변경</button>
-                <button class="modal-btn danger" id="delete-file">삭제</button>
-                <button class="modal-btn secondary modal-close">취소</button>
+                <button id="edit-confirm" class="modal-btn primary">change</button>
+                <button class="modal-btn danger" id="delete-file">delete</button>
+                <button class="modal-btn secondary modal-close">cancel</button>
             </div>
         </div>
     </div>

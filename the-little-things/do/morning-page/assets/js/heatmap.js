@@ -166,16 +166,14 @@ class HeatmapManager {
         const yearHeader = document.createElement('div');
         yearHeader.className = 'heatmap-year-header';
         yearHeader.innerHTML = `
-            <h4>${year}년 작성 현황</h4>
+            <h4></h4>
             <div class="heatmap-legend">
-                <span>적음</span>
                 <div class="legend-colors">
                     <div class="legend-color" style="background-color: #ebedf0;"></div>
                     <div class="legend-color" style="background-color: #4caf50;"></div>
                     <div class="legend-color" style="background-color: #ffc107;"></div>
                     <div class="legend-color" style="background-color: #ff9800;"></div>
                 </div>
-                <span>많음</span>
             </div>
         `;
         
@@ -186,7 +184,7 @@ class HeatmapManager {
         // 월 라벨
         const monthLabels = document.createElement('div');
         monthLabels.className = 'heatmap-months';
-        const months = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
+        const months = ['', '', '', '', '', '', '', '', '', '', '', ''];
         months.forEach(month => {
             const label = document.createElement('span');
             label.className = 'month-label';
@@ -197,7 +195,7 @@ class HeatmapManager {
         // 요일 라벨
         const dayLabels = document.createElement('div');
         dayLabels.className = 'heatmap-days';
-        const days = ['일', '월', '화', '수', '목', '금', '토'];
+        const days = ['SUN','MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
         days.forEach(day => {
             const label = document.createElement('span');
             label.className = 'day-label';
@@ -503,7 +501,7 @@ heatmapStyle.textContent = `
     
     .heatmap-content {
         display: flex;
-        gap: 4px;
+        gap: 12px;
     }
     
     .heatmap-days {
