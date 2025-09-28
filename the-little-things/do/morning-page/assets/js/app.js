@@ -76,7 +76,7 @@ class MorningPagesApp {
 
     // 모든 캐시 삭제
     clearAllCache() {
-        if (confirm('모든 저장된 로그인 정보와 캐시를 삭제하시겠습니까?\n\n이상한 문자들이 나타나는 문제도 함께 해결됩니다.')) {
+        if (confirm('모든 저장된 로그인 정보와 캐시를 삭제하시겠습니까?')) {
             // AuthManager의 모든 데이터 삭제
             authManager.logout();
             
@@ -173,8 +173,20 @@ class MorningPagesApp {
         if (sukipiNo) {
             sukipiNo.addEventListener('click', () => {
                 sukipiModal.classList.add('hidden');
-                // 수키피가 아니어도 로그인 진행
-                this.proceedWithLogin();
+                // 수키피가 아닌 경우 접근 불가
+                this.tempLoginData = null; // 임시 데이터 초기화
+                showError('Good night 🌝');
+            });
+        }
+
+        // 수키피 모달 배경 클릭으로 닫기
+        if (sukipiModal) {
+            sukipiModal.addEventListener('click', (e) => {
+                if (e.target === sukipiModal) {
+                    sukipiModal.classList.add('hidden');
+                    // 배경 클릭 시에는 모달만 닫고 로그인 진행하지 않음
+                    this.tempLoginData = null; // 임시 데이터 초기화
+                }
             });
         }
 

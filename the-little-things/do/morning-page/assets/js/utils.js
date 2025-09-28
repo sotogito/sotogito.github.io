@@ -57,11 +57,15 @@ function showError(message) {
     const errorDiv = document.createElement('div');
     errorDiv.className = 'error-message';
     errorDiv.textContent = message;
+    
+    // "Good night 🌝" 메시지인 경우 검정색으로 표시
+    const isGoodNight = message === 'Good night 🌝';
+    
     errorDiv.style.cssText = `
         position: fixed;
         top: 20px;
         right: 20px;
-        background-color: #ff4444;
+        background-color: ${isGoodNight ? '#000' : '#ff4444'};
         color: white;
         padding: 12px 16px;
         border-radius: 4px;
@@ -92,7 +96,7 @@ function showSuccess(message) {
         position: fixed;
         top: 20px;
         right: 20px;
-        background-color: #4caf50;
+        background-color: #000;
         color: white;
         padding: 12px 16px;
         border-radius: 4px;
