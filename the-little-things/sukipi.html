@@ -5,9 +5,57 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>About - sukipi</title>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@200;300;400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/about.css">
+  <style>
+    body {
+      font-family: 'Playfair Display', 'Austin News Deck Web', serif;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #333;
+      background-color: #fafafa;
+      overflow-x: hidden;
+      font-weight: 300;
+      letter-spacing: normal;
+      margin: 0;
+      padding: 40px;
+    }
+    
+    .morning-pages-link {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Playfair Display', 'Austin News Deck Web', serif;
+      font-size: 16px;
+      font-weight: 300;
+      letter-spacing: normal;
+      color: #000;
+      text-decoration: underline;
+      text-transform: none;
+      transition: color 0.2s ease;
+    }
+    
+    .morning-pages-link:hover {
+      color: hsl(219, 100%, 50%);
+      background-color: #f6ef2c;
+    }
+    
+    .morning-pages-link:hover::after {
+      content: "🥣 Is it morning? 🛌";
+      font-size: 16px;
+      text-decoration: none;
+    }
+    
+    .morning-pages-link:hover {
+      font-size: 0;
+      text-decoration: none;
+    }
+  </style>
 </head>
 <body>
-    <h1>곧 쓸 거예요</h1>
+    <a href="do/morning-page/index.html" class="morning-pages-link">Morning Pages 🌞</a>
 </body>
 </html>

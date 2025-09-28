@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Morning Pages</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@200;300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 로그인되지 않은 상태 -->
+        <div id="login-screen" class="screen">
+            <div class="login-container">
+                <h1 class="app-title">morning pages 🌞</h1>
+                
+                <form id="login-form" class="login-form">
+                    <div class="form-group">
+                        <label for="repo-url">Repository URL</label>
+                        <input 
+                            type="text" 
+                            id="repo-url" 
+                            placeholder="https://github.com/username/morning-pages-private"
+                            required
+                        >
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="access-token">Personal Access Token</label>
+                        <input 
+                            type="password" 
+                            id="access-token" 
+                            placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
+                            required
+                        >
+                    </div>
+                    
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="remember-login">
+                            <span class="checkmark"></span>
+                            auto login for 30 days
+                        </label>
+                    </div>
+                    
+                    <button type="submit" class="login-btn">Login</button>
+                    
+                    <div class="login-actions">
+                        <button type="button" id="clear-cache-btn" class="clear-cache-btn">로컬 로그인 캐시 삭제</button>
+                        <a href="#" id="token-guide">모닝페이지란?</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- 메인 애플리케이션 -->
+        <div id="main-screen" class="screen hidden">
+            <header class="app-header">
+                <div class="header-left">
+                    <h1 class="app-logo">Morning Pages</h1>
+                </div>
+                <div class="header-right">
+                    <span id="user-info" class="user-info"></span>
+                    <button id="logout-btn" class="logout-btn">Logout</button>
+                </div>
+            </header>
+
+            <main class="app-main">
+                <aside class="sidebar" id="sidebar">
+                    <div class="sidebar-header" id="sidebar-header">
+                        <h3>files</h3>
+                        <div class="sidebar-actions">
+                            <button id="new-file-btn" class="sidebar-btn" title="new file">📄</button>
+                            <span class="mobile-toggle-icon">▼</span>
+                        </div>
+                    </div>
+                    <div id="file-tree" class="file-tree">
+                        <!-- 파일 트리가 여기에 동적으로 생성됩니다 -->
+                    </div>
+                </aside>
+                
+                <!-- 리사이즈 핸들 -->
+                <div class="resize-handle" id="sidebar-resize-handle"></div>
+
+                <section class="editor-section">
+                    <div class="editor-header">
+                        <div class="editor-title">
+                            <input type="text" id="file-title" class="file-title-input" placeholder="enter file title" />
+                        </div>
+                        <div class="editor-stats">
+                            <span id="char-count">0</span> / 1000자
+                        </div>
+                    </div>
+                    
+                    <div class="editor-container">
+                        <textarea 
+                            id="editor" 
+                            class="editor-textarea"
+                            placeholder="좋은 아침..."
+                        ></textarea>
+                    </div>
+
+                    <div class="editor-footer">
+                        <div class="editor-actions">
+                            <button id="save-btn" class="save-btn" disabled>save</button>
+                        </div>
+                        <div class="writing-time">
+                            <span id="writing-time"></span>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="preview-section">
+                    <div class="preview-header" id="preview-header">
+                        <h3>preview</h3>
+                        <span class="mobile-toggle-icon">▼</span>
+                    </div>
+                    <div id="preview" class="preview-content">
+                        <!-- 마크다운 미리보기가 여기에 표시됩니다 -->
+                    </div>
+                </section>
+            </main>
+
+            <!-- 작성 현황 히트맵 (웹에서는 원래 위치 유지) -->
+            <section class="heatmap-section">
+                <div class="heatmap-header" id="heatmap-header">
+                    <h3>hit page</h3>
+                    <span class="mobile-toggle-icon">▼</span>
+                </div>
+                <div id="heatmap" class="heatmap-container">
+                    <!-- 히트맵이 여기에 동적으로 생성됩니다 -->
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- 수키피 확인 모달 -->
+    <div id="sukipi-modal" class="modal hidden">
+        <div class="modal-content sukipi-modal">
+            <div class="modal-body">
+                <h3>Good morning!</h3>
+                <div class="modal-actions">
+                    <button id="sukipi-yes" class="modal-btn primary">I'm sukipi</button>
+                    <button id="sukipi-no" class="modal-btn secondary">I'm not a sukipi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About 모달 -->
+    <div id="token-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>About Morning Pages</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="about-section">
+                    <h4>What is Morning Pages?</h4>
+                    <p>모닝페이지는 매일 아침 일어나자마자 의식의 흐름대로 3페이지 분량의 글을 손으로 써 내려가는 글쓰기 기법입니다. 이 방법은 창의력을 자극하고 내면의 목소리를 발견하는 데 도움을 주며, 스트레스 해소와 자기 이해 증진에도 효과적입니다.</p>
+                </div>
+
+                <div class="about-section">
+                    <h4>Origin</h4>
+                    <p>이 실천법은 《아티스트 웨이(The Artist's Way)》의 저자 <strong>줄리아 카메론(Julia Cameron)</strong>이 제안한 것으로, 작가나 예술가들이 창작의 블록을 극복하고 영감을 얻기 위해 활용하지만, 일반인들도 자기 성찰과 정신적 정화를 위해 사용할 수 있습니다.</p>
+                </div>
+
+                <div class="about-section">
+                    <h4>Core Principle</h4>
+                    <p>모닝페이지의 핵심은 글의 내용이나 문법에 얽매이지 않고, 머릿속에 떠오르는 생각을 그대로 종이에 옮기는 것입니다. 이를 통해 무의식적인 생각과 감정을 표출하고, 하루를 시작하는 데 있어 정신적 정리를 도울 수 있습니다.</p>
+                </div>
+
+                <div class="about-section">
+                    <h4>My Journey</h4>
+                    <p>2022년부터 작성해왔으며, <span class="journey-step">공책</span> → <span class="journey-step">노션</span> → <span class="journey-step">옵시디언</span> → <span class="journey-step">애플리케이션</span>으로 진화했습니다.</p>
+                </div>
+
+                <div class="about-section">
+                    <h4>This Service</h4>
+                    <p>전통적인 모닝페이지 실천법을 디지털 환경에 맞게 재해석한 것으로, 깃허브 저장소와 연동되어 모든 항목이 마크다운 파일로 자동 저장됩니다. 백스페이스 금지, 과거 글 수정 불가 등의 기능을 통해 진정성 있는 글쓰기를 유도하며, 시간별 색상 잔디를 통해 꾸준한 실천을 시각적으로 확인할 수 있습니다.</p>
+                </div>
+
+                <div class="about-section">
+                    <h4>Key Features</h4>
+                    <div class="features-grid">
+                        <div class="feature-item">
+                            <span class="feature-icon">📝</span>
+                            <span>1000자 이상 작성 필수</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">🚫</span>
+                            <span>백스페이스로 글 삭제 금지</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">🔒</span>
+                            <span>과거 글 수정 불가능</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">📅</span>
+                            <span>날짜별 자동 정리</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">🌱</span>
+                            <span>시간별 색상 잔디 히트맵</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">🔗</span>
+                            <span>깃허브 저장소 연동</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 파일 생성 모달 -->
+    <div id="create-modal" class="modal hidden" style="z-index: 9999;">
+        <div class="modal-content" style="pointer-events: auto;">
+            <div class="modal-body">
+                <div class="form-group">
+                    <input type="text" id="create-path" style="width: 100%; padding: 8px;">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="create-confirm" class="modal-btn primary" type="button" style="cursor: pointer; padding: 8px 16px;">create</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 파일 편집 모달 -->
+    <div id="edit-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>edit file</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="edit-path">new path</label>
+                    <input type="text" id="edit-path" placeholder="folder/subfolder/filename.md">
+                    <small>you can change file name or location</small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="edit-confirm" class="modal-btn primary">change</button>
+                <button class="modal-btn danger" id="delete-file">delete</button>
+                <button class="modal-btn secondary modal-close">cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/libs/marked.min.js"></script>
+    <script src="assets/libs/crypto-js.min.js"></script>
+    <!-- EmailJS for sending emails -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    
+    <script src="assets/js/utils.js"></script>
+    <script src="assets/js/auth.js"></script>
+    <script src="assets/js/github-api.js"></script>
+    <script src="assets/js/editor.js"></script>
+    <script src="assets/js/file-manager.js"></script>
+    <script src="assets/js/heatmap.js"></script>
+    <script src="assets/js/app.js"></script>
+</body>
+</html>
