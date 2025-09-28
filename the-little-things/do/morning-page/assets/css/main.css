@@ -976,6 +976,41 @@ body {
         max-width: 100%;
     }
     
+    .app-title {
+        font-size: 24px;
+        margin-bottom: 0;
+    }
+    
+    .app-subtitle {
+        font-size: 13px;
+        margin-bottom: 24px;
+    }
+    
+    .form-group label {
+        font-size: 12px;
+    }
+    
+    .form-group input[type="text"],
+    .form-group input[type="password"] {
+        font-size: 13px;
+    }
+    
+    .checkbox-label {
+        font-size: 12px;
+    }
+    
+    .login-btn {
+        font-size: 13px;
+    }
+    
+    .clear-cache-btn {
+        font-size: 11px;
+    }
+    
+    .login-actions a {
+        font-size: 12px;
+    }
+    
     .app-header {
         padding: 12px 16px;
     }
@@ -1224,10 +1259,6 @@ body {
 }
 
 @media (max-width: 480px) {
-    .app-title {
-        font-size: 24px;
-    }
-    
     .header-right {
         gap: 8px;
     }
