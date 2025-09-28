@@ -56,79 +56,89 @@ class HeatmapManager {
         }
     }
 
-    // 일기 파일들로부터 히트맵 데이터 생성
+    // 일기 파일들로부터 히트맵 데이터 생성 (병렬 처리)
     async generateHeatmapFromFiles(year) {
         const diaryFiles = {};
         
         // 파일 매니저에서 모든 파일 가져오기
         const files = window.fileManager.files || [];
         
-        for (const file of files) {
-            // 파일의 전체 경로 확인 (fullPath, path, name 순으로 우선순위)
+        // 해당 연도의 날짜 형식 파일들만 먼저 필터링
+        const targetYearFiles = files.filter(file => {
             const filePath = file.fullPath || file.path || file.name;
             const fileName = file.name || filePath.split('/').pop();
-            
-            // 날짜 형식이 포함된 파일인지 확인 (YYYY-MM-DD 패턴)
             const dateMatch = fileName.match(/(\d{4})-(\d{2})-(\d{2})/);
-            if (!dateMatch) continue;
+            if (!dateMatch) return false;
             
+            const fileYear = parseInt(dateMatch[1]);
+            return fileYear === year;
+        });
+        
+        console.log(`${year}년 일기 파일 ${targetYearFiles.length}개 발견, 병렬로 커밋 정보 조회 중...`);
+        
+        // 모든 파일의 커밋 정보를 병렬로 가져오기
+        const commitPromises = targetYearFiles.map(async (file) => {
+            const filePath = file.fullPath || file.path || file.name;
+            const fileName = file.name || filePath.split('/').pop();
+            const dateMatch = fileName.match(/(\d{4})-(\d{2})-(\d{2})/);
             const [fullMatch, fileYear, month, day] = dateMatch;
             const fileDate = `${fileYear}-${month}-${day}`;
             
-            // 해당 연도 파일만 처리
-            if (parseInt(fileYear) !== year) continue;
-            
-            console.log(`일기 파일 후보 발견: ${fileName} (경로: ${filePath}, 날짜: ${fileDate})`);
-            
             try {
-                // GitHub API로 파일의 커밋 정보 가져오기 (전체 경로 사용)
                 const commitInfo = await window.githubAPI.getFileCommitInfo(filePath);
-                
-                if (commitInfo && commitInfo.date) {
-                    const commitDate = new Date(commitInfo.date);
-                    const hour = commitDate.getHours();
-                    
-                    diaryFiles[fileDate] = {
-                        count: 1,
-                        hour: hour,
-                        commits: [{
-                            date: commitInfo.date,
-                            message: `일기: ${fileDate}`,
-                            fileName: filePath // 전체 경로 저장
-                        }]
-                    };
-                    
-                    console.log(`일기 파일 발견: ${fileName}, 경로: ${filePath}, 작성 시간: ${hour}시`);
-                } else {
-                    console.log(`커밋 정보 없음, 기본값 적용: ${fileName} (경로: ${filePath})`);
-                    // 커밋 정보가 없어도 일기 형식이면 기본 초록색으로 표시
-                    diaryFiles[fileDate] = {
-                        count: 1,
-                        hour: 9, // 기본 오전 시간 (초록색)
-                        commits: [{
-                            date: new Date().toISOString(), // 현재 시간으로 대체
-                            message: `일기: ${fileDate} (기본값)`,
-                            fileName: filePath // 전체 경로 저장
-                        }]
-                    };
-                }
+                return {
+                    fileDate,
+                    filePath,
+                    fileName,
+                    commitInfo
+                };
             } catch (error) {
-                console.error(`커밋 정보 가져오기 실패: ${fileName} (경로: ${filePath})`, error);
-                // 에러가 발생해도 일기 형식이면 기본 초록색으로 표시
+                console.error(`커밋 정보 가져오기 실패: ${fileName}`, error);
+                return {
+                    fileDate,
+                    filePath,
+                    fileName,
+                    commitInfo: null
+                };
+            }
+        });
+        
+        // 모든 커밋 정보를 병렬로 가져오기
+        const commitResults = await Promise.all(commitPromises);
+        
+        // 결과 처리
+        commitResults.forEach(({ fileDate, filePath, fileName, commitInfo }) => {
+            if (commitInfo && commitInfo.date) {
+                const commitDate = new Date(commitInfo.date);
+                const hour = commitDate.getHours();
+                
+                diaryFiles[fileDate] = {
+                    count: 1,
+                    hour: hour,
+                    commits: [{
+                        date: commitInfo.date,
+                        message: `일기: ${fileDate}`,
+                        fileName: filePath
+                    }]
+                };
+                
+                console.log(`일기 파일 발견: ${fileName}, 작성 시간: ${hour}시`);
+            } else {
+                // 커밋 정보가 없어도 일기 형식이면 기본 초록색으로 표시
                 diaryFiles[fileDate] = {
                     count: 1,
                     hour: 9, // 기본 오전 시간 (초록색)
                     commits: [{
                         date: new Date().toISOString(),
-                        message: `일기: ${fileDate} (에러 시 기본값)`,
-                        fileName: filePath // 전체 경로 저장
+                        message: `일기: ${fileDate} (기본값)`,
+                        fileName: filePath
                     }]
                 };
-                console.log(`에러 발생, 기본 초록색 적용: ${fileName} (경로: ${filePath})`);
+                console.log(`커밋 정보 없음, 기본값 적용: ${fileName}`);
             }
-        }
+        });
         
-        console.log(`${year}년 일기 파일 ${Object.keys(diaryFiles).length}개 발견`);
+        console.log(`${year}년 일기 파일 ${Object.keys(diaryFiles).length}개 처리 완료`);
         return diaryFiles;
     }
 
