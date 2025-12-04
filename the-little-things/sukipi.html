@@ -4,12 +4,41 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>About - sukipi</title>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&family=Dancing+Script&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/about.css">
+  <style>
+    .morning-pages-link {
+      font-size: 1rem;
+      color: rgb(247, 156, 0);
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .morning-pages-link:hover {
+      color: #67d2fd;
+      background-color: #fdf5b2;
+      text-decoration: none;
+    }
+
+    .morning-pages-link:hover .text-default {
+      display: none;
+    }
+
+    .morning-pages-link:hover .text-hover {
+      display: inline;
+    }
+
+    .text-hover {
+      display: none;
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.3rem;
+    }
+  </style>
 </head>
 <body>
     <a href="https://morning-page.vercel.app" class="morning-pages-link">
-      Morning Pages 🌞
+      <span class="text-default">Morning Pages🌞</span>
+      <span class="text-hover">🛌 Is it morning? 🥣</span>
     </a>
 </body>
 </html>
